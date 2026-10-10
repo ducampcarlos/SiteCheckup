@@ -32,6 +32,7 @@ class FakeSite:
         self.routes: dict[str, Callable[[], httpx.Response]] = {}
         self.calls: list[str] = []
         self.requests: list[httpx.Request] = []
+        self.error: Exception | None = None
 
     def add(
         self,
@@ -66,6 +67,8 @@ class FakeSite:
         key = str(request.url)
         self.calls.append(key)
         self.requests.append(request)
+        if self.error:
+            raise self.error
         build = (
             self.routes.get(key) or self.routes.get(key.rstrip("/")) or self.routes.get(key + "/")
         )
@@ -93,6 +96,11 @@ def make_client() -> Callable[..., PoliteClient]:
 
 
 GOOD_CERT = CertInfo(verified=True, issuer="Example CA", subject="example.com", not_after=None)
+
+
+def ok_cert(_host: str, _port: int) -> CertInfo:
+    """A cert provider that always reports a verified certificate."""
+    return GOOD_CERT
 
 
 @pytest.fixture
