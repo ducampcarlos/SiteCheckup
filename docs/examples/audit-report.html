@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SiteCheckup audit: http://localhost:8080</title>
+<style>
+:root { --bg:#f6f7f9; --card:#fff; --text:#1c2430; --muted:#5b6675; --border:#dde1e7;
+  --high:#c62828; --medium:#b26a00; --low:#00748f; --info:#6b7686; --ok:#2e7d32; --accent:#2f5bd6; }
+@media (prefers-color-scheme: dark) {
+  :root { --bg:#12161c; --card:#1a2028; --text:#e6e9ee; --muted:#98a3b3; --border:#2b3440;
+    --high:#ef6b6b; --medium:#f0b040; --low:#4fc3dc; --info:#8d98a8; --ok:#6cc070; --accent:#7f9cff; } }
+* { box-sizing: border-box; }
+body { margin:0; background:var(--bg); color:var(--text);
+  font:15px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; }
+main { max-width: 980px; margin: 0 auto; padding: 24px 16px 48px; }
+h1 { font-size: 1.6rem; margin: 0 0 4px; } h2 { font-size: 1.15rem; margin: 32px 0 12px; }
+.muted { color: var(--muted); } code, pre { font-family: ui-monospace,SFMono-Regular,Menlo,monospace; font-size: .86em; }
+pre { background: var(--bg); border:1px solid var(--border); border-radius:6px; padding:8px 10px;
+  white-space: pre-wrap; word-break: break-word; margin: 6px 0; }
+.card { background:var(--card); border:1px solid var(--border); border-radius:10px; padding:14px 16px; margin: 10px 0; }
+.summary { display:flex; flex-wrap:wrap; gap:12px; align-items:stretch; }
+.summary .card { flex:1 1 110px; margin:0; text-align:center; }
+.big { font-size: 2.4rem; font-weight: 700; line-height: 1.1; }
+.badge { display:inline-block; padding:1px 8px; border-radius:999px; font-size:.75rem; font-weight:700;
+  text-transform:uppercase; letter-spacing:.03em; color:#fff; vertical-align: middle; }
+.sev-high,.v-blocking { background: var(--high); } .sev-medium,.v-warning { background: var(--medium); }
+.sev-low { background: var(--low); } .sev-info { background: var(--info); } .v-ok { background: var(--ok); }
+details > summary { cursor:pointer; list-style:none; } details > summary::-webkit-details-marker { display:none; }
+details > summary::before { content:"▸ "; color:var(--muted); } details[open] > summary::before { content:"▾ "; }
+table { width:100%; border-collapse: collapse; } th,td { text-align:left; padding:6px 8px; border-bottom:1px solid var(--border); vertical-align: top; }
+th { color: var(--muted); font-weight: 600; font-size:.85rem; }
+a { color: var(--accent); } ul { margin: 6px 0; padding-left: 20px; }
+.notice { border-left: 4px solid var(--accent); }
+footer { margin-top: 40px; color: var(--muted); font-size: .85rem; }
+@media print { body { background:#fff; } details { display:block; } }
+</style>
+</head>
+<body>
+<main>
+<h1>SiteCheckup audit</h1>
+<p class="muted">Target: <strong>http://localhost:8080</strong> · 30 requests</p>
+
+<div class="summary">
+  <div class="card"><div class="big">F</div><div class="muted">grade</div></div>
+  <div class="card"><div class="big">17</div><div class="muted">score / 100</div></div>
+  <div class="card"><div class="big" style="color:var(--high)">3</div><div class="muted">high</div></div>
+  <div class="card"><div class="big" style="color:var(--medium)">5</div><div class="muted">medium</div></div>
+  <div class="card"><div class="big" style="color:var(--low)">4</div><div class="muted">low</div></div>
+  <div class="card"><div class="big" style="color:var(--info)">2</div><div class="muted">info</div></div>
+</div>
+
+<h2>Findings (14)</h2>
+<details class="card" open>
+  <summary><span class="badge sev-high">high</span>
+    <strong>HTTP redirects to HTTPS</strong> <code class="muted">transport-https-redirect</code></summary>
+<p><strong>Evidence</strong></p><pre>http://localhost:8080/ answered 200 over plain HTTP.</pre>  <p>Visitors who type or follow an http:// link should be sent to HTTPS immediately; otherwise traffic and cookies can be read or altered in transit.</p>
+  <p><strong>Remediation.</strong> Add a site-wide permanent (301/308) redirect from http:// to https:// at the web server or CDN, then enable HSTS once every subdomain works over HTTPS.</p>
+<p class="muted">References:
+<a href="https://owasp.org/www-project-secure-headers/" rel="noopener noreferrer">https://owasp.org/www-project-secure-headers/</a> · <a href="https://cheatsheetseries.owasp.org/cheatsheets/Transport_Layer_Security_Cheat_Sheet.html" rel="noopener noreferrer">https://cheatsheetseries.owasp.org/cheatsheets/Transport_Layer_Security_Cheat_Sheet.html</a></p></details>
+<details class="card" open>
+  <summary><span class="badge sev-high">high</span>
+    <strong>No exposed .env file</strong> <code class="muted">exposed-env</code></summary>
+<p><strong>Evidence</strong></p><pre>/.env -&gt; HTTP 200, 88 bytes (contents deliberately not recorded)</pre>  <p>Environment files commonly hold database passwords, API keys and app secrets.</p>
+  <p><strong>Remediation.</strong> Move the file outside the web root or deny access to it, then rotate every secret it contained: assume it was read.</p>
+<p class="muted">References:
+<a href="https://owasp.org/www-project-web-security-testing-guide/latest/4-Web_Application_Security_Testing/02-Configuration_and_Deployment_Management_Testing/04-Review_Old_Backup_and_Unreferenced_Files_for_Sensitive_Information" rel="noopener noreferrer">https://owasp.org/www-project-web-security-testing-guide/latest/4-Web_Application_Security_Testing/02-Configuration_and_Deployment_Management_Testing/04-Review_Old_Backup_and_Unreferenced_Files_for_Sensitive_Information</a></p></details>
+<details class="card" open>
+  <summary><span class="badge sev-high">high</span>
+    <strong>No backup or archive files in the web root</strong> <code class="muted">exposed-backups</code></summary>
+<p><strong>Evidence</strong></p><pre>/backup.sql -&gt; HTTP 200, 136 bytes (contents deliberately not recorded)</pre>  <p>Database dumps, archives and *.bak copies of configuration files are downloadable by anyone who guesses the name, and often contain credentials or full site content.</p>
+  <p><strong>Remediation.</strong> Delete the files, store backups outside the web root, and add a deploy-time check that fails if archives or *.bak/*.old/*~ files appear in the published directory.</p>
+<p class="muted">References:
+<a href="https://owasp.org/www-project-web-security-testing-guide/latest/4-Web_Application_Security_Testing/02-Configuration_and_Deployment_Management_Testing/04-Review_Old_Backup_and_Unreferenced_Files_for_Sensitive_Information" rel="noopener noreferrer">https://owasp.org/www-project-web-security-testing-guide/latest/4-Web_Application_Security_Testing/02-Configuration_and_Deployment_Management_Testing/04-Review_Old_Backup_and_Unreferenced_Files_for_Sensitive_Information</a></p></details>
+<details class="card">
+  <summary><span class="badge sev-medium">medium</span>
+    <strong>Content-Security-Policy is set and not trivially bypassable</strong> <code class="muted">headers-csp</code></summary>
+<p><strong>Evidence</strong></p><pre>No Content-Security-Policy header.</pre>  <p>CSP limits where scripts and other resources may load from, which is the main browser-side mitigation for cross-site scripting. Policies that allow &#39;unsafe-inline&#39;, &#39;unsafe-eval&#39; or wildcards for scripts give little protection.</p>
+  <p><strong>Remediation.</strong> Start with &#39;Content-Security-Policy-Report-Only&#39;, collect violations, then enforce a policy such as &#34;default-src &#39;self&#39;; script-src &#39;self&#39;; object-src &#39;none&#39;; base-uri &#39;self&#39;; frame-ancestors &#39;self&#39;&#34;.</p>
+<p class="muted">References:
+<a href="https://developer.mozilla.org/docs/Web/HTTP/Headers/Content-Security-Policy" rel="noopener noreferrer">https://developer.mozilla.org/docs/Web/HTTP/Headers/Content-Security-Policy</a> · <a href="https://owasp.org/www-project-secure-headers/#content-security-policy" rel="noopener noreferrer">https://owasp.org/www-project-secure-headers/#content-security-policy</a></p></details>
+<details class="card">
+  <summary><span class="badge sev-medium">medium</span>
+    <strong>Cookies have the HttpOnly flag</strong> <code class="muted">cookies-httponly</code></summary>
+<p><strong>Evidence</strong></p><pre>Cookies without HttpOnly: session_hint</pre>  <p>HttpOnly hides a cookie from JavaScript, so an XSS bug cannot steal it. Session-like cookie names raise the severity.</p>
+  <p><strong>Remediation.</strong> Set HttpOnly on session and authentication cookies.</p>
+<p class="muted">References:
+<a href="https://developer.mozilla.org/docs/Web/HTTP/Cookies#restrict_access_to_cookies" rel="noopener noreferrer">https://developer.mozilla.org/docs/Web/HTTP/Cookies#restrict_access_to_cookies</a> · <a href="https://owasp.org/www-community/controls/SecureCookieAttribute" rel="noopener noreferrer">https://owasp.org/www-community/controls/SecureCookieAttribute</a></p></details>
+<details class="card">
+  <summary><span class="badge sev-medium">medium</span>
+    <strong>Cookies declare SameSite</strong> <code class="muted">cookies-samesite</code></summary>
+<p><strong>Evidence</strong></p><pre>Cookies without a safe SameSite: session_hint</pre>  <p>SameSite=Lax or Strict stops browsers attaching the cookie to cross-site requests, reducing cross-site request forgery. SameSite=None requires Secure.</p>
+  <p><strong>Remediation.</strong> Set &#39;SameSite=Lax&#39; (or &#39;Strict&#39; where possible) on cookies.</p>
+<p class="muted">References:
+<a href="https://developer.mozilla.org/docs/Web/HTTP/Cookies#samesite_attribute" rel="noopener noreferrer">https://developer.mozilla.org/docs/Web/HTTP/Cookies#samesite_attribute</a> · <a href="https://owasp.org/www-community/controls/SecureCookieAttribute" rel="noopener noreferrer">https://owasp.org/www-community/controls/SecureCookieAttribute</a></p></details>
+<details class="card">
+  <summary><span class="badge sev-medium">medium</span>
+    <strong>Directory listing is disabled</strong> <code class="muted">exposed-directory-listing</code></summary>
+<p><strong>Evidence</strong></p><pre>/uploads/ -&gt; HTTP 200, 270 bytes</pre>  <p>Directory indexes reveal file names (backups, exports, uploads) that should not be discoverable.</p>
+  <p><strong>Remediation.</strong> Disable auto-indexing (&#39;autoindex off;&#39; in nginx, &#39;Options -Indexes&#39; in Apache).</p>
+<p class="muted">References:
+<a href="https://owasp.org/www-project-web-security-testing-guide/latest/4-Web_Application_Security_Testing/02-Configuration_and_Deployment_Management_Testing/04-Review_Old_Backup_and_Unreferenced_Files_for_Sensitive_Information" rel="noopener noreferrer">https://owasp.org/www-project-web-security-testing-guide/latest/4-Web_Application_Security_Testing/02-Configuration_and_Deployment_Management_Testing/04-Review_Old_Backup_and_Unreferenced_Files_for_Sensitive_Information</a></p></details>
+<details class="card">
+  <summary><span class="badge sev-medium">medium</span>
+    <strong>Homepage has sensible cache headers</strong> <code class="muted">hygiene-cache-headers</code></summary>
+<p><strong>Evidence</strong></p><pre>Response sets cookies but is publicly cacheable: public, max-age=300</pre>  <p>Responses without any caching headers are re-downloaded every time; responses that set cookies but are marked public can be cached by shared proxies and leak between users.</p>
+  <p><strong>Remediation.</strong> Send an explicit Cache-Control: &#39;public, max-age=...&#39; for static pages, &#39;private, no-store&#39; for anything personalised or that sets session cookies.</p>
+<p class="muted">References:
+<a href="https://developer.mozilla.org/docs/Web/HTTP/Caching" rel="noopener noreferrer">https://developer.mozilla.org/docs/Web/HTTP/Caching</a></p></details>
+<details class="card">
+  <summary><span class="badge sev-low">low</span>
+    <strong>Referrer-Policy limits URL leakage</strong> <code class="muted">headers-referrer-policy</code></summary>
+<p><strong>Evidence</strong></p><pre>No Referrer-Policy header.</pre>  <p>The Referer header can leak full URLs (including tokens in query strings) to third parties. A restrictive policy keeps that data on your own origin.</p>
+  <p><strong>Remediation.</strong> Send &#39;Referrer-Policy: strict-origin-when-cross-origin&#39; (or stricter).</p>
+<p class="muted">References:
+<a href="https://developer.mozilla.org/docs/Web/HTTP/Headers/Referrer-Policy" rel="noopener noreferrer">https://developer.mozilla.org/docs/Web/HTTP/Headers/Referrer-Policy</a> · <a href="https://owasp.org/www-project-secure-headers/#referrer-policy" rel="noopener noreferrer">https://owasp.org/www-project-secure-headers/#referrer-policy</a></p></details>
+<details class="card">
+  <summary><span class="badge sev-low">low</span>
+    <strong>Permissions-Policy is set</strong> <code class="muted">headers-permissions-policy</code></summary>
+<p><strong>Evidence</strong></p><pre>No Permissions-Policy header.</pre>  <p>Permissions-Policy disables browser features (camera, microphone, geolocation...) the site does not need, limiting the impact of injected or third-party content.</p>
+  <p><strong>Remediation.</strong> Send e.g. &#39;Permissions-Policy: camera=(), microphone=(), geolocation=()&#39;.</p>
+<p class="muted">References:
+<a href="https://developer.mozilla.org/docs/Web/HTTP/Headers/Permissions-Policy" rel="noopener noreferrer">https://developer.mozilla.org/docs/Web/HTTP/Headers/Permissions-Policy</a> · <a href="https://owasp.org/www-project-secure-headers/#permissions-policy" rel="noopener noreferrer">https://owasp.org/www-project-secure-headers/#permissions-policy</a></p></details>
+<details class="card">
+  <summary><span class="badge sev-low">low</span>
+    <strong>Server header does not disclose a version</strong> <code class="muted">headers-server-disclosure</code></summary>
+<p><strong>Evidence</strong></p><pre>Server: nginx/1.27.5</pre>  <p>Version banners make it trivial to look up known vulnerabilities for the exact software in use.</p>
+  <p><strong>Remediation.</strong> Hide versions: &#39;server_tokens off;&#39; (nginx), &#39;ServerTokens Prod&#39; and &#39;ServerSignature Off&#39; (Apache), or strip the header at the CDN/proxy.</p>
+<p class="muted">References:
+<a href="https://developer.mozilla.org/docs/Web/HTTP/Headers/Server" rel="noopener noreferrer">https://developer.mozilla.org/docs/Web/HTTP/Headers/Server</a> · <a href="https://owasp.org/www-project-web-security-testing-guide/" rel="noopener noreferrer">https://owasp.org/www-project-web-security-testing-guide/</a></p></details>
+<details class="card">
+  <summary><span class="badge sev-low">low</span>
+    <strong>No framework banner headers (X-Powered-By and friends)</strong> <code class="muted">headers-powered-by</code></summary>
+<p><strong>Evidence</strong></p><pre>x-powered-by: PHP/7.4.33</pre>  <p>Headers such as X-Powered-By, X-AspNet-Version and X-Generator advertise the technology stack and often its version.</p>
+  <p><strong>Remediation.</strong> Remove the headers: &#39;expose_php = Off&#39; for PHP, &#39;header_remove(&#34;X-Powered-By&#34;)&#39;, or &#39;proxy_hide_header X-Powered-By;&#39; in nginx.</p>
+<p class="muted">References:
+<a href="https://developer.mozilla.org/docs/Web/HTTP/Headers/X-Powered-By" rel="noopener noreferrer">https://developer.mozilla.org/docs/Web/HTTP/Headers/X-Powered-By</a></p></details>
+<details class="card">
+  <summary><span class="badge sev-info">info</span>
+    <strong>Cross-origin isolation headers (COOP/CORP/COEP)</strong> <code class="muted">headers-cross-origin</code></summary>
+<p><strong>Evidence</strong></p><pre>Not set: cross-origin-opener-policy, cross-origin-resource-policy, cross-origin-embedder-policy</pre>  <p>Cross-Origin-Opener-Policy, Cross-Origin-Resource-Policy and Cross-Origin-Embedder-Policy isolate the page from other origins. They are defence in depth and not required for every site, so this is informational.</p>
+  <p><strong>Remediation.</strong> Consider &#39;Cross-Origin-Opener-Policy: same-origin&#39; and &#39;Cross-Origin-Resource-Policy: same-site&#39; if the site does not rely on cross-origin popups or embeds.</p>
+<p class="muted">References:
+<a href="https://developer.mozilla.org/docs/Web/HTTP/Headers/Cross-Origin-Opener-Policy" rel="noopener noreferrer">https://developer.mozilla.org/docs/Web/HTTP/Headers/Cross-Origin-Opener-Policy</a> · <a href="https://owasp.org/www-project-secure-headers/#cross-origin-opener-policy" rel="noopener noreferrer">https://owasp.org/www-project-secure-headers/#cross-origin-opener-policy</a></p></details>
+<details class="card">
+  <summary><span class="badge sev-info">info</span>
+    <strong>security.txt is published</strong> <code class="muted">hygiene-security-txt</code></summary>
+<p><strong>Evidence</strong></p><pre>No security.txt with a Contact field found.</pre>  <p>RFC 9116 security.txt gives researchers a clear, private channel to report problems.</p>
+  <p><strong>Remediation.</strong> Publish /.well-known/security.txt with Contact: and Expires: fields.</p>
+<p class="muted">References:
+<a href="https://www.rfc-editor.org/rfc/rfc9116" rel="noopener noreferrer">https://www.rfc-editor.org/rfc/rfc9116</a> · <a href="https://securitytxt.org/" rel="noopener noreferrer">https://securitytxt.org/</a></p></details>
+
+
+<h2>Passed (5)</h2>
+<table><thead><tr><th>Check</th><th>Observed</th></tr></thead><tbody>
+<tr><td>Clickjacking protection (X-Frame-Options / frame-ancestors)<br><code class="muted">headers-clickjacking</code></td><td>X-Frame-Options: SAMEORIGIN</td></tr><tr><td>X-Content-Type-Options: nosniff<br><code class="muted">headers-content-type-options</code></td><td>nosniff</td></tr><tr><td>No exposed .git directory<br><code class="muted">exposed-git</code></td><td>2 path(s) checked; none exposed.</td></tr><tr><td>No diagnostic or admin-tool leftovers (phpinfo, server-status, Adminer)<br><code class="muted">exposed-diagnostics</code></td><td>5 path(s) checked; none exposed.</td></tr><tr><td>robots.txt is present<br><code class="muted">hygiene-robots-txt</code></td><td>77 bytes</td></tr></tbody></table>
+
+<h2>Not applicable (12)</h2>
+<table><thead><tr><th>Check</th><th>Reason</th></tr></thead><tbody>
+<tr><td>TLS certificate is valid and not close to expiry<br><code class="muted">transport-tls-certificate</code></td><td>Plain-HTTP target on a non-default port; TLS not applicable.</td></tr><tr><td>HSTS is enabled with a long max-age<br><code class="muted">transport-hsts</code></td><td>Homepage is not served over HTTPS; HSTS is ignored on HTTP.</td></tr><tr><td>Cookies have the Secure flag<br><code class="muted">cookies-secure</code></td><td>Homepage is served over HTTP, where Secure cannot take effect.</td></tr><tr><td>WordPress version is not disclosed<br><code class="muted">wp-version-disclosure</code></td><td>WordPress was not detected on the homepage.</td></tr><tr><td>xmlrpc.php is not reachable<br><code class="muted">wp-xmlrpc</code></td><td>WordPress was not detected on the homepage.</td></tr><tr><td>REST API does not list users publicly<br><code class="muted">wp-user-enumeration-rest</code></td><td>WordPress was not detected on the homepage.</td></tr><tr><td>?author=N does not reveal usernames<br><code class="muted">wp-user-enumeration-author</code></td><td>WordPress was not detected on the homepage.</td></tr><tr><td>readme.html / license.txt are not exposed<br><code class="muted">wp-readme-license</code></td><td>WordPress was not detected on the homepage.</td></tr><tr><td>wp-content/debug.log is not exposed<br><code class="muted">wp-debug-log</code></td><td>WordPress was not detected on the homepage.</td></tr><tr><td>wp-login.php is reachable from the internet<br><code class="muted">wp-login-exposed</code></td><td>WordPress was not detected on the homepage.</td></tr><tr><td>Plugin and theme names are not enumerable from page source<br><code class="muted">wp-plugin-theme-disclosure</code></td><td>WordPress was not detected on the homepage.</td></tr><tr><td>No mixed content on the homepage<br><code class="muted">hygiene-mixed-content</code></td><td>Homepage is not served over HTTPS.</td></tr></tbody></table>
+<footer>Generated by SiteCheckup 0.1.0 on 2026-10-10 02:21 UTC.
+Passive automated checks only; this is not a substitute for a professional penetration test.</footer>
+</main>
+</body>
+</html>

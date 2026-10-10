@@ -1,0 +1,649 @@
+{
+  "tool_version": "0.1.0",
+  "old_base": "http://localhost:8080",
+  "new_base": "http://localhost:8081",
+  "generated_at": "2026-10-10T02:21:21.137767Z",
+  "source": "sitemap",
+  "requests_made": 26,
+  "truncated": false,
+  "results": [
+    {
+      "path": "/",
+      "new_path": "/",
+      "old": {
+        "url": "http://localhost:8080/",
+        "final_url": "http://localhost:8080/",
+        "status": 200,
+        "chain": [],
+        "loop": false,
+        "blocked_redirect": null,
+        "error": null,
+        "elapsed_ms": 3,
+        "title": "Maple & Crumb Bakery | Fresh bread daily",
+        "meta_description": "Fresh bread, pastries and coffee baked every morning.",
+        "canonical": "http://localhost:8080/",
+        "h1": "Maple & Crumb Bakery",
+        "noindex": false,
+        "security_headers": [
+          "x-frame-options",
+          "x-content-type-options"
+        ],
+        "is_html": true
+      },
+      "new": {
+        "url": "http://localhost:8081/",
+        "final_url": "http://localhost:8081/",
+        "status": 200,
+        "chain": [],
+        "loop": false,
+        "blocked_redirect": null,
+        "error": null,
+        "elapsed_ms": 3,
+        "title": "Maple & Crumb Bakery | Fresh bread daily",
+        "meta_description": "Fresh bread, pastries and coffee baked every morning.",
+        "canonical": "http://localhost:8081/",
+        "h1": "Maple & Crumb Bakery",
+        "noindex": false,
+        "security_headers": [
+          "content-security-policy",
+          "x-content-type-options",
+          "referrer-policy",
+          "permissions-policy"
+        ],
+        "is_html": true
+      },
+      "issues": [
+        {
+          "code": "security_header_lost",
+          "level": "info",
+          "message": "Security headers present on old but missing on new: x-frame-options"
+        }
+      ]
+    },
+    {
+      "path": "/about",
+      "new_path": "/about",
+      "old": {
+        "url": "http://localhost:8080/about",
+        "final_url": "http://localhost:8080/about",
+        "status": 200,
+        "chain": [],
+        "loop": false,
+        "blocked_redirect": null,
+        "error": null,
+        "elapsed_ms": 2,
+        "title": "About us | Maple & Crumb",
+        "meta_description": "The story behind the bakery.",
+        "canonical": "http://localhost:8080/about",
+        "h1": "About us",
+        "noindex": false,
+        "security_headers": [
+          "x-frame-options",
+          "x-content-type-options"
+        ],
+        "is_html": true
+      },
+      "new": {
+        "url": "http://localhost:8081/about",
+        "final_url": "http://localhost:8081/about",
+        "status": 200,
+        "chain": [],
+        "loop": false,
+        "blocked_redirect": null,
+        "error": null,
+        "elapsed_ms": 2,
+        "title": "Our story | Maple & Crumb",
+        "meta_description": "The story behind the bakery.",
+        "canonical": "http://localhost:8081/about",
+        "h1": "About us",
+        "noindex": false,
+        "security_headers": [
+          "content-security-policy",
+          "x-content-type-options",
+          "referrer-policy",
+          "permissions-policy"
+        ],
+        "is_html": true
+      },
+      "issues": [
+        {
+          "code": "title_changed",
+          "level": "warning",
+          "message": "Title changed: 'About us | Maple & Crumb' -> 'Our story | Maple & Crumb'."
+        },
+        {
+          "code": "security_header_lost",
+          "level": "info",
+          "message": "Security headers present on old but missing on new: x-frame-options"
+        }
+      ]
+    },
+    {
+      "path": "/menu",
+      "new_path": "/menu",
+      "old": {
+        "url": "http://localhost:8080/menu",
+        "final_url": "http://localhost:8080/menu",
+        "status": 200,
+        "chain": [],
+        "loop": false,
+        "blocked_redirect": null,
+        "error": null,
+        "elapsed_ms": 3,
+        "title": "Menu | Maple & Crumb",
+        "meta_description": "Breads, pastries and coffee.",
+        "canonical": "http://localhost:8080/menu",
+        "h1": "Menu",
+        "noindex": false,
+        "security_headers": [
+          "x-frame-options",
+          "x-content-type-options"
+        ],
+        "is_html": true
+      },
+      "new": {
+        "url": "http://localhost:8081/menu",
+        "final_url": "http://localhost:8081/menu",
+        "status": 200,
+        "chain": [],
+        "loop": false,
+        "blocked_redirect": null,
+        "error": null,
+        "elapsed_ms": 2,
+        "title": "Menu | Maple & Crumb",
+        "meta_description": "Breads, pastries and coffee.",
+        "canonical": "http://localhost:8080/menu",
+        "h1": "Menu",
+        "noindex": false,
+        "security_headers": [
+          "content-security-policy",
+          "x-content-type-options",
+          "referrer-policy",
+          "permissions-policy"
+        ],
+        "is_html": true
+      },
+      "issues": [
+        {
+          "code": "canonical_points_to_old_host",
+          "level": "blocking",
+          "message": "Canonical still points at the old host: http://localhost:8080/menu"
+        },
+        {
+          "code": "security_header_lost",
+          "level": "info",
+          "message": "Security headers present on old but missing on new: x-frame-options"
+        }
+      ]
+    },
+    {
+      "path": "/specials",
+      "new_path": "/specials",
+      "old": {
+        "url": "http://localhost:8080/specials",
+        "final_url": "http://localhost:8080/specials",
+        "status": 200,
+        "chain": [],
+        "loop": false,
+        "blocked_redirect": null,
+        "error": null,
+        "elapsed_ms": 2,
+        "title": "Specials | Maple & Crumb",
+        "meta_description": "Daily specials.",
+        "canonical": "http://localhost:8080/specials",
+        "h1": "Today's specials",
+        "noindex": false,
+        "security_headers": [
+          "x-frame-options",
+          "x-content-type-options"
+        ],
+        "is_html": true
+      },
+      "new": {
+        "url": "http://localhost:8081/specials",
+        "final_url": "http://localhost:8081/deals",
+        "status": 200,
+        "chain": [
+          {
+            "url": "http://localhost:8081/specials",
+            "status": 301
+          },
+          {
+            "url": "http://localhost:8081/offers",
+            "status": 301
+          },
+          {
+            "url": "http://localhost:8081/offers/",
+            "status": 301
+          }
+        ],
+        "loop": false,
+        "blocked_redirect": null,
+        "error": null,
+        "elapsed_ms": 10,
+        "title": "Specials | Maple & Crumb",
+        "meta_description": "Daily specials.",
+        "canonical": "http://localhost:8081/deals",
+        "h1": "Today's specials",
+        "noindex": false,
+        "security_headers": [
+          "content-security-policy",
+          "x-content-type-options",
+          "referrer-policy",
+          "permissions-policy"
+        ],
+        "is_html": true
+      },
+      "issues": [
+        {
+          "code": "redirect_chain_long",
+          "level": "warning",
+          "message": "3 redirects before the final page (limit 2): http://localhost:8081/specials -> http://localhost:8081/offers -> http://localhost:8081/offers/ -> http://localhost:8081/deals"
+        },
+        {
+          "code": "unexpected_redirect",
+          "level": "warning",
+          "message": "Old site serves the URL directly; the new site redirects (301) to http://localhost:8081/offers."
+        },
+        {
+          "code": "security_header_lost",
+          "level": "info",
+          "message": "Security headers present on old but missing on new: x-frame-options"
+        }
+      ]
+    },
+    {
+      "path": "/contact",
+      "new_path": "/contact",
+      "old": {
+        "url": "http://localhost:8080/contact",
+        "final_url": "http://localhost:8080/contact",
+        "status": 200,
+        "chain": [],
+        "loop": false,
+        "blocked_redirect": null,
+        "error": null,
+        "elapsed_ms": 3,
+        "title": "Contact | Maple & Crumb",
+        "meta_description": "Opening hours and how to find us.",
+        "canonical": "http://localhost:8080/contact",
+        "h1": "Contact",
+        "noindex": false,
+        "security_headers": [
+          "x-frame-options",
+          "x-content-type-options"
+        ],
+        "is_html": true
+      },
+      "new": {
+        "url": "http://localhost:8081/contact",
+        "final_url": "http://localhost:8081/contact",
+        "status": 200,
+        "chain": [],
+        "loop": false,
+        "blocked_redirect": null,
+        "error": null,
+        "elapsed_ms": 2,
+        "title": "Contact | Maple & Crumb",
+        "meta_description": "Opening hours and how to find us.",
+        "canonical": "http://localhost:8081/contact",
+        "h1": "Contact",
+        "noindex": true,
+        "security_headers": [
+          "content-security-policy",
+          "x-content-type-options",
+          "referrer-policy",
+          "permissions-policy"
+        ],
+        "is_html": true
+      },
+      "issues": [
+        {
+          "code": "noindex_added",
+          "level": "blocking",
+          "message": "The new page is marked noindex; it will drop out of search."
+        },
+        {
+          "code": "security_header_lost",
+          "level": "info",
+          "message": "Security headers present on old but missing on new: x-frame-options"
+        }
+      ]
+    },
+    {
+      "path": "/blog/",
+      "new_path": "/blog/",
+      "old": {
+        "url": "http://localhost:8080/blog/",
+        "final_url": "http://localhost:8080/blog/",
+        "status": 200,
+        "chain": [],
+        "loop": false,
+        "blocked_redirect": null,
+        "error": null,
+        "elapsed_ms": 2,
+        "title": "Blog | Maple & Crumb",
+        "meta_description": "Baking notes and news.",
+        "canonical": "http://localhost:8080/blog/",
+        "h1": "Blog",
+        "noindex": false,
+        "security_headers": [
+          "x-frame-options",
+          "x-content-type-options"
+        ],
+        "is_html": true
+      },
+      "new": {
+        "url": "http://localhost:8081/blog/",
+        "final_url": "http://localhost:8081/blog/",
+        "status": 200,
+        "chain": [],
+        "loop": false,
+        "blocked_redirect": null,
+        "error": null,
+        "elapsed_ms": 2,
+        "title": "Blog | Maple & Crumb",
+        "meta_description": "Baking notes and news.",
+        "canonical": "http://localhost:8081/blog/",
+        "h1": "Blog",
+        "noindex": false,
+        "security_headers": [
+          "content-security-policy",
+          "x-content-type-options",
+          "referrer-policy",
+          "permissions-policy"
+        ],
+        "is_html": true
+      },
+      "issues": [
+        {
+          "code": "security_header_lost",
+          "level": "info",
+          "message": "Security headers present on old but missing on new: x-frame-options"
+        }
+      ]
+    },
+    {
+      "path": "/blog/sourdough-basics",
+      "new_path": "/blog/sourdough-basics",
+      "old": {
+        "url": "http://localhost:8080/blog/sourdough-basics",
+        "final_url": "http://localhost:8080/blog/sourdough-basics",
+        "status": 200,
+        "chain": [],
+        "loop": false,
+        "blocked_redirect": null,
+        "error": null,
+        "elapsed_ms": 2,
+        "title": "Sourdough basics | Maple & Crumb",
+        "meta_description": "A beginner's guide to sourdough.",
+        "canonical": "http://localhost:8080/blog/sourdough-basics",
+        "h1": "Sourdough basics",
+        "noindex": false,
+        "security_headers": [
+          "x-frame-options",
+          "x-content-type-options"
+        ],
+        "is_html": true
+      },
+      "new": {
+        "url": "http://localhost:8081/blog/sourdough-basics",
+        "final_url": "http://localhost:8081/blog/sourdough-basics",
+        "status": 200,
+        "chain": [],
+        "loop": false,
+        "blocked_redirect": null,
+        "error": null,
+        "elapsed_ms": 2,
+        "title": "Sourdough basics | Maple & Crumb",
+        "meta_description": null,
+        "canonical": "http://localhost:8081/blog/sourdough-basics",
+        "h1": "Sourdough basics",
+        "noindex": false,
+        "security_headers": [
+          "content-security-policy",
+          "x-content-type-options",
+          "referrer-policy",
+          "permissions-policy"
+        ],
+        "is_html": true
+      },
+      "issues": [
+        {
+          "code": "meta_description_lost",
+          "level": "warning",
+          "message": "Meta description is missing on the new page."
+        },
+        {
+          "code": "security_header_lost",
+          "level": "info",
+          "message": "Security headers present on old but missing on new: x-frame-options"
+        }
+      ]
+    },
+    {
+      "path": "/blog/holiday-hours",
+      "new_path": "/blog/holiday-hours",
+      "old": {
+        "url": "http://localhost:8080/blog/holiday-hours",
+        "final_url": "http://localhost:8080/blog/holiday-hours",
+        "status": 200,
+        "chain": [],
+        "loop": false,
+        "blocked_redirect": null,
+        "error": null,
+        "elapsed_ms": 2,
+        "title": "Holiday hours | Maple & Crumb",
+        "meta_description": "Opening hours over the holidays.",
+        "canonical": "http://localhost:8080/blog/holiday-hours",
+        "h1": "Holiday hours",
+        "noindex": false,
+        "security_headers": [
+          "x-frame-options",
+          "x-content-type-options"
+        ],
+        "is_html": true
+      },
+      "new": {
+        "url": "http://localhost:8081/blog/holiday-hours",
+        "final_url": "http://localhost:8081/blog/holiday-hours",
+        "status": 404,
+        "chain": [],
+        "loop": false,
+        "blocked_redirect": null,
+        "error": null,
+        "elapsed_ms": 2,
+        "title": "Not found | Maple & Crumb",
+        "meta_description": null,
+        "canonical": null,
+        "h1": "Page not found",
+        "noindex": false,
+        "security_headers": [
+          "content-security-policy",
+          "x-content-type-options",
+          "referrer-policy",
+          "permissions-policy"
+        ],
+        "is_html": true
+      },
+      "issues": [
+        {
+          "code": "missing_on_new",
+          "level": "blocking",
+          "message": "Old site returns 200 but the new site returns 404."
+        }
+      ]
+    },
+    {
+      "path": "/old-promo",
+      "new_path": "/old-promo",
+      "old": {
+        "url": "http://localhost:8080/old-promo",
+        "final_url": "http://localhost:8080/old-promo",
+        "status": 200,
+        "chain": [],
+        "loop": false,
+        "blocked_redirect": null,
+        "error": null,
+        "elapsed_ms": 2,
+        "title": "Spring promo | Maple & Crumb",
+        "meta_description": "Spring promotion.",
+        "canonical": "http://localhost:8080/old-promo",
+        "h1": "Spring promo",
+        "noindex": false,
+        "security_headers": [
+          "x-frame-options",
+          "x-content-type-options"
+        ],
+        "is_html": true
+      },
+      "new": {
+        "url": "http://localhost:8081/old-promo",
+        "final_url": "http://localhost:8081/old-promo",
+        "status": 404,
+        "chain": [],
+        "loop": false,
+        "blocked_redirect": null,
+        "error": null,
+        "elapsed_ms": 2,
+        "title": "Not found | Maple & Crumb",
+        "meta_description": null,
+        "canonical": null,
+        "h1": "Page not found",
+        "noindex": false,
+        "security_headers": [
+          "content-security-policy",
+          "x-content-type-options",
+          "referrer-policy",
+          "permissions-policy"
+        ],
+        "is_html": true
+      },
+      "issues": [
+        {
+          "code": "missing_on_new",
+          "level": "blocking",
+          "message": "Old site returns 200 but the new site returns 404."
+        }
+      ]
+    },
+    {
+      "path": "/our-team",
+      "new_path": "/team",
+      "old": {
+        "url": "http://localhost:8080/our-team",
+        "final_url": "http://localhost:8080/our-team",
+        "status": 200,
+        "chain": [],
+        "loop": false,
+        "blocked_redirect": null,
+        "error": null,
+        "elapsed_ms": 2,
+        "title": "Our team | Maple & Crumb",
+        "meta_description": "Meet the bakers.",
+        "canonical": "http://localhost:8080/our-team",
+        "h1": "Our team",
+        "noindex": false,
+        "security_headers": [
+          "x-frame-options",
+          "x-content-type-options"
+        ],
+        "is_html": true
+      },
+      "new": {
+        "url": "http://localhost:8081/team",
+        "final_url": "http://localhost:8081/team",
+        "status": 200,
+        "chain": [],
+        "loop": false,
+        "blocked_redirect": null,
+        "error": null,
+        "elapsed_ms": 2,
+        "title": "Our team | Maple & Crumb",
+        "meta_description": "Meet the bakers.",
+        "canonical": "http://localhost:8081/team",
+        "h1": "Our team",
+        "noindex": false,
+        "security_headers": [
+          "content-security-policy",
+          "x-content-type-options",
+          "referrer-policy",
+          "permissions-policy"
+        ],
+        "is_html": true
+      },
+      "issues": [
+        {
+          "code": "security_header_lost",
+          "level": "info",
+          "message": "Security headers present on old but missing on new: x-frame-options"
+        }
+      ]
+    },
+    {
+      "path": "/gallery",
+      "new_path": "/gallery",
+      "old": {
+        "url": "http://localhost:8080/gallery",
+        "final_url": "http://localhost:8080/gallery",
+        "status": 200,
+        "chain": [],
+        "loop": false,
+        "blocked_redirect": null,
+        "error": null,
+        "elapsed_ms": 2,
+        "title": "Gallery | Maple & Crumb",
+        "meta_description": "Photos.",
+        "canonical": "http://localhost:8080/gallery",
+        "h1": "Gallery",
+        "noindex": false,
+        "security_headers": [
+          "x-frame-options",
+          "x-content-type-options"
+        ],
+        "is_html": true
+      },
+      "new": {
+        "url": "http://localhost:8081/gallery",
+        "final_url": "http://localhost:8081/gallery",
+        "status": 200,
+        "chain": [],
+        "loop": false,
+        "blocked_redirect": null,
+        "error": null,
+        "elapsed_ms": 2486,
+        "title": "Gallery | Maple & Crumb",
+        "meta_description": "Photos.",
+        "canonical": "http://localhost:8081/gallery",
+        "h1": "Gallery",
+        "noindex": false,
+        "security_headers": [
+          "content-security-policy",
+          "x-content-type-options",
+          "referrer-policy",
+          "permissions-policy"
+        ],
+        "is_html": true
+      },
+      "issues": [
+        {
+          "code": "security_header_lost",
+          "level": "info",
+          "message": "Security headers present on old but missing on new: x-frame-options"
+        },
+        {
+          "code": "slower",
+          "level": "warning",
+          "message": "Slower on the new site: 2 ms -> 2486 ms (+2484 ms)."
+        }
+      ]
+    }
+  ],
+  "site_issues": [
+    {
+      "code": "security_header_lost_sitewide",
+      "level": "warning",
+      "message": "x-frame-options was sent on the old site but is missing on the new one (9 of 9 comparable pages)."
+    }
+  ]
+}

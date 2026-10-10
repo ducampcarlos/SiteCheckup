@@ -1,0 +1,430 @@
+{
+  "tool_version": "0.1.0",
+  "target": "http://localhost:8080",
+  "generated_at": "2026-10-10T02:21:20.948255Z",
+  "requests_made": 30,
+  "truncated": false,
+  "wordpress_detected": false,
+  "score": 17,
+  "grade": "F",
+  "findings": [
+    {
+      "id": "transport-https-redirect",
+      "title": "HTTP redirects to HTTPS",
+      "category": "transport",
+      "severity": "high",
+      "status": "fail",
+      "description": "Visitors who type or follow an http:// link should be sent to HTTPS immediately; otherwise traffic and cookies can be read or altered in transit.",
+      "evidence": "http://localhost:8080/ answered 200 over plain HTTP.",
+      "remediation": "Add a site-wide permanent (301/308) redirect from http:// to https:// at the web server or CDN, then enable HSTS once every subdomain works over HTTPS.",
+      "references": [
+        "https://owasp.org/www-project-secure-headers/",
+        "https://cheatsheetseries.owasp.org/cheatsheets/Transport_Layer_Security_Cheat_Sheet.html"
+      ]
+    },
+    {
+      "id": "transport-tls-certificate",
+      "title": "TLS certificate is valid and not close to expiry",
+      "category": "transport",
+      "severity": "high",
+      "status": "skipped",
+      "description": "An invalid, mismatched or expired certificate triggers browser warnings and breaks API clients. Severity is high when verification fails or expiry is within 7 days, medium within 30 days.",
+      "evidence": "Plain-HTTP target on a non-default port; TLS not applicable.",
+      "remediation": "Renew or reissue the certificate, make sure it covers the exact hostname, and automate renewal (for example ACME/Let's Encrypt with monitoring on expiry).",
+      "references": [
+        "https://developer.mozilla.org/docs/Web/Security/Transport_Layer_Security",
+        "https://cheatsheetseries.owasp.org/cheatsheets/Transport_Layer_Security_Cheat_Sheet.html"
+      ]
+    },
+    {
+      "id": "transport-hsts",
+      "title": "HSTS is enabled with a long max-age",
+      "category": "transport",
+      "severity": "medium",
+      "status": "skipped",
+      "description": "Strict-Transport-Security tells browsers to use HTTPS only, which defeats downgrade and cookie-stripping attacks. A max-age under 180 days is considered too short to be effective.",
+      "evidence": "Homepage is not served over HTTPS; HSTS is ignored on HTTP.",
+      "remediation": "Send 'Strict-Transport-Security: max-age=31536000; includeSubDomains' on HTTPS responses. Start with a short max-age while testing, then raise it.",
+      "references": [
+        "https://developer.mozilla.org/docs/Web/HTTP/Headers/Strict-Transport-Security",
+        "https://owasp.org/www-project-secure-headers/#strict-transport-security"
+      ]
+    },
+    {
+      "id": "headers-csp",
+      "title": "Content-Security-Policy is set and not trivially bypassable",
+      "category": "headers",
+      "severity": "medium",
+      "status": "fail",
+      "description": "CSP limits where scripts and other resources may load from, which is the main browser-side mitigation for cross-site scripting. Policies that allow 'unsafe-inline', 'unsafe-eval' or wildcards for scripts give little protection.",
+      "evidence": "No Content-Security-Policy header.",
+      "remediation": "Start with 'Content-Security-Policy-Report-Only', collect violations, then enforce a policy such as \"default-src 'self'; script-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'self'\".",
+      "references": [
+        "https://developer.mozilla.org/docs/Web/HTTP/Headers/Content-Security-Policy",
+        "https://owasp.org/www-project-secure-headers/#content-security-policy"
+      ]
+    },
+    {
+      "id": "headers-clickjacking",
+      "title": "Clickjacking protection (X-Frame-Options / frame-ancestors)",
+      "category": "headers",
+      "severity": "medium",
+      "status": "pass",
+      "description": "Without framing protection another site can embed this one in an invisible frame and trick users into clicking.",
+      "evidence": "X-Frame-Options: SAMEORIGIN",
+      "remediation": "Send \"Content-Security-Policy: frame-ancestors 'self'\" (preferred) and/or 'X-Frame-Options: SAMEORIGIN' for older browsers.",
+      "references": [
+        "https://developer.mozilla.org/docs/Web/HTTP/Headers/X-Frame-Options",
+        "https://owasp.org/www-project-secure-headers/#x-frame-options"
+      ]
+    },
+    {
+      "id": "headers-content-type-options",
+      "title": "X-Content-Type-Options: nosniff",
+      "category": "headers",
+      "severity": "low",
+      "status": "pass",
+      "description": "Stops browsers from guessing content types, which can turn uploads into scripts.",
+      "evidence": "nosniff",
+      "remediation": "Send 'X-Content-Type-Options: nosniff' on all responses.",
+      "references": [
+        "https://developer.mozilla.org/docs/Web/HTTP/Headers/X-Content-Type-Options",
+        "https://owasp.org/www-project-secure-headers/#x-content-type-options"
+      ]
+    },
+    {
+      "id": "headers-referrer-policy",
+      "title": "Referrer-Policy limits URL leakage",
+      "category": "headers",
+      "severity": "low",
+      "status": "fail",
+      "description": "The Referer header can leak full URLs (including tokens in query strings) to third parties. A restrictive policy keeps that data on your own origin.",
+      "evidence": "No Referrer-Policy header.",
+      "remediation": "Send 'Referrer-Policy: strict-origin-when-cross-origin' (or stricter).",
+      "references": [
+        "https://developer.mozilla.org/docs/Web/HTTP/Headers/Referrer-Policy",
+        "https://owasp.org/www-project-secure-headers/#referrer-policy"
+      ]
+    },
+    {
+      "id": "headers-permissions-policy",
+      "title": "Permissions-Policy is set",
+      "category": "headers",
+      "severity": "low",
+      "status": "fail",
+      "description": "Permissions-Policy disables browser features (camera, microphone, geolocation...) the site does not need, limiting the impact of injected or third-party content.",
+      "evidence": "No Permissions-Policy header.",
+      "remediation": "Send e.g. 'Permissions-Policy: camera=(), microphone=(), geolocation=()'.",
+      "references": [
+        "https://developer.mozilla.org/docs/Web/HTTP/Headers/Permissions-Policy",
+        "https://owasp.org/www-project-secure-headers/#permissions-policy"
+      ]
+    },
+    {
+      "id": "headers-cross-origin",
+      "title": "Cross-origin isolation headers (COOP/CORP/COEP)",
+      "category": "headers",
+      "severity": "info",
+      "status": "fail",
+      "description": "Cross-Origin-Opener-Policy, Cross-Origin-Resource-Policy and Cross-Origin-Embedder-Policy isolate the page from other origins. They are defence in depth and not required for every site, so this is informational.",
+      "evidence": "Not set: cross-origin-opener-policy, cross-origin-resource-policy, cross-origin-embedder-policy",
+      "remediation": "Consider 'Cross-Origin-Opener-Policy: same-origin' and 'Cross-Origin-Resource-Policy: same-site' if the site does not rely on cross-origin popups or embeds.",
+      "references": [
+        "https://developer.mozilla.org/docs/Web/HTTP/Headers/Cross-Origin-Opener-Policy",
+        "https://owasp.org/www-project-secure-headers/#cross-origin-opener-policy"
+      ]
+    },
+    {
+      "id": "headers-server-disclosure",
+      "title": "Server header does not disclose a version",
+      "category": "headers",
+      "severity": "low",
+      "status": "fail",
+      "description": "Version banners make it trivial to look up known vulnerabilities for the exact software in use.",
+      "evidence": "Server: nginx/1.27.5",
+      "remediation": "Hide versions: 'server_tokens off;' (nginx), 'ServerTokens Prod' and 'ServerSignature Off' (Apache), or strip the header at the CDN/proxy.",
+      "references": [
+        "https://developer.mozilla.org/docs/Web/HTTP/Headers/Server",
+        "https://owasp.org/www-project-web-security-testing-guide/"
+      ]
+    },
+    {
+      "id": "headers-powered-by",
+      "title": "No framework banner headers (X-Powered-By and friends)",
+      "category": "headers",
+      "severity": "low",
+      "status": "fail",
+      "description": "Headers such as X-Powered-By, X-AspNet-Version and X-Generator advertise the technology stack and often its version.",
+      "evidence": "x-powered-by: PHP/7.4.33",
+      "remediation": "Remove the headers: 'expose_php = Off' for PHP, 'header_remove(\"X-Powered-By\")', or 'proxy_hide_header X-Powered-By;' in nginx.",
+      "references": [
+        "https://developer.mozilla.org/docs/Web/HTTP/Headers/X-Powered-By"
+      ]
+    },
+    {
+      "id": "cookies-secure",
+      "title": "Cookies have the Secure flag",
+      "category": "cookies",
+      "severity": "medium",
+      "status": "skipped",
+      "description": "Cookies without Secure may be sent over plain HTTP, where they can be read or replaced by anyone on the network path. Session-like cookie names raise the severity.",
+      "evidence": "Homepage is served over HTTP, where Secure cannot take effect.",
+      "remediation": "Set the Secure attribute on every cookie (framework session settings usually expose it).",
+      "references": [
+        "https://developer.mozilla.org/docs/Web/HTTP/Headers/Set-Cookie",
+        "https://owasp.org/www-community/controls/SecureCookieAttribute"
+      ]
+    },
+    {
+      "id": "cookies-httponly",
+      "title": "Cookies have the HttpOnly flag",
+      "category": "cookies",
+      "severity": "medium",
+      "status": "fail",
+      "description": "HttpOnly hides a cookie from JavaScript, so an XSS bug cannot steal it. Session-like cookie names raise the severity.",
+      "evidence": "Cookies without HttpOnly: session_hint",
+      "remediation": "Set HttpOnly on session and authentication cookies.",
+      "references": [
+        "https://developer.mozilla.org/docs/Web/HTTP/Cookies#restrict_access_to_cookies",
+        "https://owasp.org/www-community/controls/SecureCookieAttribute"
+      ]
+    },
+    {
+      "id": "cookies-samesite",
+      "title": "Cookies declare SameSite",
+      "category": "cookies",
+      "severity": "medium",
+      "status": "fail",
+      "description": "SameSite=Lax or Strict stops browsers attaching the cookie to cross-site requests, reducing cross-site request forgery. SameSite=None requires Secure.",
+      "evidence": "Cookies without a safe SameSite: session_hint",
+      "remediation": "Set 'SameSite=Lax' (or 'Strict' where possible) on cookies.",
+      "references": [
+        "https://developer.mozilla.org/docs/Web/HTTP/Cookies#samesite_attribute",
+        "https://owasp.org/www-community/controls/SecureCookieAttribute"
+      ]
+    },
+    {
+      "id": "exposed-git",
+      "title": "No exposed .git directory",
+      "category": "exposed-files",
+      "severity": "high",
+      "status": "pass",
+      "description": "A web-accessible .git directory lets anyone download the repository, including history, configuration and sometimes credentials.",
+      "evidence": "2 path(s) checked; none exposed.",
+      "remediation": "Deploy build artefacts, not working copies. Block dot-directories at the web server ('location ~ /\\. { deny all; }'), and rotate any secret that was ever committed.",
+      "references": [
+        "https://owasp.org/www-project-web-security-testing-guide/latest/4-Web_Application_Security_Testing/02-Configuration_and_Deployment_Management_Testing/04-Review_Old_Backup_and_Unreferenced_Files_for_Sensitive_Information"
+      ]
+    },
+    {
+      "id": "exposed-env",
+      "title": "No exposed .env file",
+      "category": "exposed-files",
+      "severity": "high",
+      "status": "fail",
+      "description": "Environment files commonly hold database passwords, API keys and app secrets.",
+      "evidence": "/.env -> HTTP 200, 88 bytes (contents deliberately not recorded)",
+      "remediation": "Move the file outside the web root or deny access to it, then rotate every secret it contained: assume it was read.",
+      "references": [
+        "https://owasp.org/www-project-web-security-testing-guide/latest/4-Web_Application_Security_Testing/02-Configuration_and_Deployment_Management_Testing/04-Review_Old_Backup_and_Unreferenced_Files_for_Sensitive_Information"
+      ]
+    },
+    {
+      "id": "exposed-backups",
+      "title": "No backup or archive files in the web root",
+      "category": "exposed-files",
+      "severity": "high",
+      "status": "fail",
+      "description": "Database dumps, archives and *.bak copies of configuration files are downloadable by anyone who guesses the name, and often contain credentials or full site content.",
+      "evidence": "/backup.sql -> HTTP 200, 136 bytes (contents deliberately not recorded)",
+      "remediation": "Delete the files, store backups outside the web root, and add a deploy-time check that fails if archives or *.bak/*.old/*~ files appear in the published directory.",
+      "references": [
+        "https://owasp.org/www-project-web-security-testing-guide/latest/4-Web_Application_Security_Testing/02-Configuration_and_Deployment_Management_Testing/04-Review_Old_Backup_and_Unreferenced_Files_for_Sensitive_Information"
+      ]
+    },
+    {
+      "id": "exposed-directory-listing",
+      "title": "Directory listing is disabled",
+      "category": "exposed-files",
+      "severity": "medium",
+      "status": "fail",
+      "description": "Directory indexes reveal file names (backups, exports, uploads) that should not be discoverable.",
+      "evidence": "/uploads/ -> HTTP 200, 270 bytes",
+      "remediation": "Disable auto-indexing ('autoindex off;' in nginx, 'Options -Indexes' in Apache).",
+      "references": [
+        "https://owasp.org/www-project-web-security-testing-guide/latest/4-Web_Application_Security_Testing/02-Configuration_and_Deployment_Management_Testing/04-Review_Old_Backup_and_Unreferenced_Files_for_Sensitive_Information"
+      ]
+    },
+    {
+      "id": "exposed-diagnostics",
+      "title": "No diagnostic or admin-tool leftovers (phpinfo, server-status, Adminer)",
+      "category": "exposed-files",
+      "severity": "medium",
+      "status": "pass",
+      "description": "phpinfo() pages, Apache server-status and database admin tools expose configuration details and attack surface to the whole internet.",
+      "evidence": "5 path(s) checked; none exposed.",
+      "remediation": "Remove the files, or restrict them by IP/VPN and authentication. Never leave diagnostics on production.",
+      "references": [
+        "https://owasp.org/www-project-web-security-testing-guide/latest/4-Web_Application_Security_Testing/02-Configuration_and_Deployment_Management_Testing/04-Review_Old_Backup_and_Unreferenced_Files_for_Sensitive_Information"
+      ]
+    },
+    {
+      "id": "wp-version-disclosure",
+      "title": "WordPress version is not disclosed",
+      "category": "wordpress",
+      "severity": "low",
+      "status": "skipped",
+      "description": "The <meta name='generator'> tag advertises the exact WordPress version, which makes targeted attacks against outdated installs easier.",
+      "evidence": "WordPress was not detected on the homepage.",
+      "remediation": "Remove the generator tag (remove_action('wp_head', 'wp_generator')) and, more importantly, keep core updated so the version does not matter.",
+      "references": [
+        "https://developer.wordpress.org/advanced-administration/security/hardening/"
+      ]
+    },
+    {
+      "id": "wp-xmlrpc",
+      "title": "xmlrpc.php is not reachable",
+      "category": "wordpress",
+      "severity": "medium",
+      "status": "skipped",
+      "description": "xmlrpc.php enables password guessing at scale (system.multicall) and pingback abuse. Most sites do not need it. Only a GET is sent; the endpoint's standard 'POST only' answer is enough to prove it is live.",
+      "evidence": "WordPress was not detected on the homepage.",
+      "remediation": "Block /xmlrpc.php at the web server or with a hardening plugin, unless a specific integration (such as the mobile app or Jetpack) requires it.",
+      "references": [
+        "https://developer.wordpress.org/advanced-administration/security/hardening/"
+      ]
+    },
+    {
+      "id": "wp-user-enumeration-rest",
+      "title": "REST API does not list users publicly",
+      "category": "wordpress",
+      "severity": "medium",
+      "status": "skipped",
+      "description": "/wp-json/wp/v2/users (or /?rest_route=/wp/v2/users) returns user slugs (often the login name) to anonymous visitors, giving attackers half of every credential pair.",
+      "evidence": "WordPress was not detected on the homepage.",
+      "remediation": "Restrict the users endpoint to authenticated requests (a small mu-plugin using the rest_endpoints filter, or your security plugin) and make sure login names differ from public author slugs.",
+      "references": [
+        "https://developer.wordpress.org/advanced-administration/security/hardening/",
+        "https://developer.wordpress.org/rest-api/reference/users/"
+      ]
+    },
+    {
+      "id": "wp-user-enumeration-author",
+      "title": "?author=N does not reveal usernames",
+      "category": "wordpress",
+      "severity": "medium",
+      "status": "skipped",
+      "description": "Requesting /?author=1 redirects to /author/<login>/ on default installs, revealing the username of the first account.",
+      "evidence": "WordPress was not detected on the homepage.",
+      "remediation": "Redirect or 404 ?author= queries for anonymous visitors, or set a different user_nicename so the slug is not the login.",
+      "references": [
+        "https://developer.wordpress.org/advanced-administration/security/hardening/"
+      ]
+    },
+    {
+      "id": "wp-readme-license",
+      "title": "readme.html / license.txt are not exposed",
+      "category": "wordpress",
+      "severity": "low",
+      "status": "skipped",
+      "description": "readme.html shows the installed version and confirms the platform.",
+      "evidence": "WordPress was not detected on the homepage.",
+      "remediation": "Delete readme.html and license.txt (WordPress restores them on updates, so block them at the server instead).",
+      "references": [
+        "https://developer.wordpress.org/advanced-administration/security/hardening/"
+      ]
+    },
+    {
+      "id": "wp-debug-log",
+      "title": "wp-content/debug.log is not exposed",
+      "category": "wordpress",
+      "severity": "high",
+      "status": "skipped",
+      "description": "With WP_DEBUG_LOG enabled, PHP errors (paths, queries, sometimes personal data) are written to a file that is publicly downloadable by default.",
+      "evidence": "WordPress was not detected on the homepage.",
+      "remediation": "Delete the file, set WP_DEBUG_LOG to a path outside the web root (or disable it), and deny access to *.log files.",
+      "references": [
+        "https://wordpress.org/documentation/article/debugging-in-wordpress/"
+      ]
+    },
+    {
+      "id": "wp-login-exposed",
+      "title": "wp-login.php is reachable from the internet",
+      "category": "wordpress",
+      "severity": "info",
+      "status": "skipped",
+      "description": "The login page is expected on most sites, but it is the main target of password guessing. This is a note, not a vulnerability.",
+      "evidence": "WordPress was not detected on the homepage.",
+      "remediation": "Add rate limiting or a WAF rule, enforce strong passwords and two-factor authentication, and consider restricting /wp-admin by IP or VPN for editors.",
+      "references": [
+        "https://developer.wordpress.org/advanced-administration/security/hardening/"
+      ]
+    },
+    {
+      "id": "wp-plugin-theme-disclosure",
+      "title": "Plugin and theme names are not enumerable from page source",
+      "category": "wordpress",
+      "severity": "info",
+      "status": "skipped",
+      "description": "Asset URLs reveal which plugins and themes are installed. This is detection only: SiteCheckup does not look versions up in vulnerability databases. Exposed versions raise the severity to low.",
+      "evidence": "WordPress was not detected on the homepage.",
+      "remediation": "Keep every plugin and theme updated and remove unused ones. Hiding names is not a substitute for patching.",
+      "references": [
+        "https://developer.wordpress.org/advanced-administration/security/hardening/"
+      ]
+    },
+    {
+      "id": "hygiene-robots-txt",
+      "title": "robots.txt is present",
+      "category": "hygiene",
+      "severity": "info",
+      "status": "pass",
+      "description": "robots.txt tells well-behaved crawlers what to skip and where the sitemap is. It is not an access control: never list secret paths in it.",
+      "evidence": "77 bytes",
+      "remediation": "Publish /robots.txt with a Sitemap: line and sensible Disallow rules.",
+      "references": [
+        "https://developer.mozilla.org/docs/Glossary/Robots.txt"
+      ]
+    },
+    {
+      "id": "hygiene-security-txt",
+      "title": "security.txt is published",
+      "category": "hygiene",
+      "severity": "info",
+      "status": "fail",
+      "description": "RFC 9116 security.txt gives researchers a clear, private channel to report problems.",
+      "evidence": "No security.txt with a Contact field found.",
+      "remediation": "Publish /.well-known/security.txt with Contact: and Expires: fields.",
+      "references": [
+        "https://www.rfc-editor.org/rfc/rfc9116",
+        "https://securitytxt.org/"
+      ]
+    },
+    {
+      "id": "hygiene-mixed-content",
+      "title": "No mixed content on the homepage",
+      "category": "hygiene",
+      "severity": "medium",
+      "status": "skipped",
+      "description": "Scripts, frames and stylesheets loaded over http:// from an HTTPS page can be tampered with (medium); images and media are lower risk (low).",
+      "evidence": "Homepage is not served over HTTPS.",
+      "remediation": "Change the references to https:// (or protocol-relative paths), fix hard-coded URLs left over from migrations in the database/templates, and add 'upgrade-insecure-requests' to the CSP as a safety net.",
+      "references": [
+        "https://developer.mozilla.org/docs/Web/Security/Mixed_content"
+      ]
+    },
+    {
+      "id": "hygiene-cache-headers",
+      "title": "Homepage has sensible cache headers",
+      "category": "hygiene",
+      "severity": "medium",
+      "status": "fail",
+      "description": "Responses without any caching headers are re-downloaded every time; responses that set cookies but are marked public can be cached by shared proxies and leak between users.",
+      "evidence": "Response sets cookies but is publicly cacheable: public, max-age=300",
+      "remediation": "Send an explicit Cache-Control: 'public, max-age=...' for static pages, 'private, no-store' for anything personalised or that sets session cookies.",
+      "references": [
+        "https://developer.mozilla.org/docs/Web/HTTP/Caching"
+      ]
+    }
+  ]
+}

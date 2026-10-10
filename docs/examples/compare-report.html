@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SiteCheckup compare: http://localhost:8080 vs http://localhost:8081</title>
+<style>
+:root { --bg:#f6f7f9; --card:#fff; --text:#1c2430; --muted:#5b6675; --border:#dde1e7;
+  --high:#c62828; --medium:#b26a00; --low:#00748f; --info:#6b7686; --ok:#2e7d32; --accent:#2f5bd6; }
+@media (prefers-color-scheme: dark) {
+  :root { --bg:#12161c; --card:#1a2028; --text:#e6e9ee; --muted:#98a3b3; --border:#2b3440;
+    --high:#ef6b6b; --medium:#f0b040; --low:#4fc3dc; --info:#8d98a8; --ok:#6cc070; --accent:#7f9cff; } }
+* { box-sizing: border-box; }
+body { margin:0; background:var(--bg); color:var(--text);
+  font:15px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; }
+main { max-width: 980px; margin: 0 auto; padding: 24px 16px 48px; }
+h1 { font-size: 1.6rem; margin: 0 0 4px; } h2 { font-size: 1.15rem; margin: 32px 0 12px; }
+.muted { color: var(--muted); } code, pre { font-family: ui-monospace,SFMono-Regular,Menlo,monospace; font-size: .86em; }
+pre { background: var(--bg); border:1px solid var(--border); border-radius:6px; padding:8px 10px;
+  white-space: pre-wrap; word-break: break-word; margin: 6px 0; }
+.card { background:var(--card); border:1px solid var(--border); border-radius:10px; padding:14px 16px; margin: 10px 0; }
+.summary { display:flex; flex-wrap:wrap; gap:12px; align-items:stretch; }
+.summary .card { flex:1 1 110px; margin:0; text-align:center; }
+.big { font-size: 2.4rem; font-weight: 700; line-height: 1.1; }
+.badge { display:inline-block; padding:1px 8px; border-radius:999px; font-size:.75rem; font-weight:700;
+  text-transform:uppercase; letter-spacing:.03em; color:#fff; vertical-align: middle; }
+.sev-high,.v-blocking { background: var(--high); } .sev-medium,.v-warning { background: var(--medium); }
+.sev-low { background: var(--low); } .sev-info { background: var(--info); } .v-ok { background: var(--ok); }
+details > summary { cursor:pointer; list-style:none; } details > summary::-webkit-details-marker { display:none; }
+details > summary::before { content:"▸ "; color:var(--muted); } details[open] > summary::before { content:"▾ "; }
+table { width:100%; border-collapse: collapse; } th,td { text-align:left; padding:6px 8px; border-bottom:1px solid var(--border); vertical-align: top; }
+th { color: var(--muted); font-weight: 600; font-size:.85rem; }
+a { color: var(--accent); } ul { margin: 6px 0; padding-left: 20px; }
+.notice { border-left: 4px solid var(--accent); }
+footer { margin-top: 40px; color: var(--muted); font-size: .85rem; }
+@media print { body { background:#fff; } details { display:block; } }
+</style>
+</head>
+<body>
+<main>
+<h1>SiteCheckup compare</h1>
+<p class="muted">Old: <strong>http://localhost:8080</strong><br>New: <strong>http://localhost:8081</strong><br>
+11 URLs from sitemap · 26 requests</p>
+
+<div class="summary">
+  <div class="card"><div class="big" style="color:var(--high)">4</div><div class="muted">blocking</div></div>
+  <div class="card"><div class="big" style="color:var(--medium)">4</div><div class="muted">warnings</div></div>
+  <div class="card"><div class="big" style="color:var(--ok)">3</div><div class="muted">ok</div></div>
+</div>
+
+<h2>Site-wide</h2>
+<div class="card"><span class="badge v-warning">warning</span> <code>security_header_lost_sitewide</code> x-frame-options was sent on the old site but is missing on the new one (9 of 9 comparable pages).</div>
+<h2>Most common issues</h2>
+<table><thead><tr><th>Issue</th><th>URLs</th></tr></thead><tbody>
+<tr><td><code>missing_on_new</code></td><td>2</td></tr><tr><td><code>canonical_points_to_old_host</code></td><td>1</td></tr><tr><td><code>meta_description_lost</code></td><td>1</td></tr><tr><td><code>noindex_added</code></td><td>1</td></tr><tr><td><code>redirect_chain_long</code></td><td>1</td></tr><tr><td><code>slower</code></td><td>1</td></tr><tr><td><code>title_changed</code></td><td>1</td></tr><tr><td><code>unexpected_redirect</code></td><td>1</td></tr></tbody></table>
+<h2>Blocking (4)</h2>
+<details class="card">
+  <summary><span class="badge v-blocking">blocking</span>
+    <code>/menu</code>    <span class="muted"> · 200 → 200</span></summary>
+  <ul>
+<li><span class="badge v-blocking">blocking</span> <code>canonical_points_to_old_host</code> Canonical still points at the old host: http://localhost:8080/menu</li><li><span class="badge v-ok">info</span> <code>security_header_lost</code> Security headers present on old but missing on new: x-frame-options</li>  </ul>
+  <table><thead><tr><th></th><th>Old</th><th>New</th></tr></thead><tbody>
+    <tr><td>Final URL</td><td>http://localhost:8080/menu</td><td>http://localhost:8081/menu</td></tr>
+    <tr><td>Redirects</td><td>0</td><td>0</td></tr>
+    <tr><td>Title</td><td>Menu | Maple &amp; Crumb</td><td>Menu | Maple &amp; Crumb</td></tr>
+    <tr><td>Canonical</td><td>http://localhost:8080/menu</td><td>http://localhost:8080/menu</td></tr>
+    <tr><td>Time</td><td>3 ms</td><td>2 ms</td></tr>
+  </tbody></table>
+</details>
+<details class="card">
+  <summary><span class="badge v-blocking">blocking</span>
+    <code>/contact</code>    <span class="muted"> · 200 → 200</span></summary>
+  <ul>
+<li><span class="badge v-blocking">blocking</span> <code>noindex_added</code> The new page is marked noindex; it will drop out of search.</li><li><span class="badge v-ok">info</span> <code>security_header_lost</code> Security headers present on old but missing on new: x-frame-options</li>  </ul>
+  <table><thead><tr><th></th><th>Old</th><th>New</th></tr></thead><tbody>
+    <tr><td>Final URL</td><td>http://localhost:8080/contact</td><td>http://localhost:8081/contact</td></tr>
+    <tr><td>Redirects</td><td>0</td><td>0</td></tr>
+    <tr><td>Title</td><td>Contact | Maple &amp; Crumb</td><td>Contact | Maple &amp; Crumb</td></tr>
+    <tr><td>Canonical</td><td>http://localhost:8080/contact</td><td>http://localhost:8081/contact</td></tr>
+    <tr><td>Time</td><td>3 ms</td><td>2 ms</td></tr>
+  </tbody></table>
+</details>
+<details class="card">
+  <summary><span class="badge v-blocking">blocking</span>
+    <code>/blog/holiday-hours</code>    <span class="muted"> · 200 → 404</span></summary>
+  <ul>
+<li><span class="badge v-blocking">blocking</span> <code>missing_on_new</code> Old site returns 200 but the new site returns 404.</li>  </ul>
+  <table><thead><tr><th></th><th>Old</th><th>New</th></tr></thead><tbody>
+    <tr><td>Final URL</td><td>http://localhost:8080/blog/holiday-hours</td><td>http://localhost:8081/blog/holiday-hours</td></tr>
+    <tr><td>Redirects</td><td>0</td><td>0</td></tr>
+    <tr><td>Title</td><td>Holiday hours | Maple &amp; Crumb</td><td>Not found | Maple &amp; Crumb</td></tr>
+    <tr><td>Canonical</td><td>http://localhost:8080/blog/holiday-hours</td><td>—</td></tr>
+    <tr><td>Time</td><td>2 ms</td><td>2 ms</td></tr>
+  </tbody></table>
+</details>
+<details class="card">
+  <summary><span class="badge v-blocking">blocking</span>
+    <code>/old-promo</code>    <span class="muted"> · 200 → 404</span></summary>
+  <ul>
+<li><span class="badge v-blocking">blocking</span> <code>missing_on_new</code> Old site returns 200 but the new site returns 404.</li>  </ul>
+  <table><thead><tr><th></th><th>Old</th><th>New</th></tr></thead><tbody>
+    <tr><td>Final URL</td><td>http://localhost:8080/old-promo</td><td>http://localhost:8081/old-promo</td></tr>
+    <tr><td>Redirects</td><td>0</td><td>0</td></tr>
+    <tr><td>Title</td><td>Spring promo | Maple &amp; Crumb</td><td>Not found | Maple &amp; Crumb</td></tr>
+    <tr><td>Canonical</td><td>http://localhost:8080/old-promo</td><td>—</td></tr>
+    <tr><td>Time</td><td>2 ms</td><td>2 ms</td></tr>
+  </tbody></table>
+</details>
+<h2>Warnings (4)</h2>
+<details class="card">
+  <summary><span class="badge v-warning">warning</span>
+    <code>/about</code>    <span class="muted"> · 200 → 200</span></summary>
+  <ul>
+<li><span class="badge v-warning">warning</span> <code>title_changed</code> Title changed: &#39;About us | Maple &amp; Crumb&#39; -&gt; &#39;Our story | Maple &amp; Crumb&#39;.</li><li><span class="badge v-ok">info</span> <code>security_header_lost</code> Security headers present on old but missing on new: x-frame-options</li>  </ul>
+  <table><thead><tr><th></th><th>Old</th><th>New</th></tr></thead><tbody>
+    <tr><td>Final URL</td><td>http://localhost:8080/about</td><td>http://localhost:8081/about</td></tr>
+    <tr><td>Redirects</td><td>0</td><td>0</td></tr>
+    <tr><td>Title</td><td>About us | Maple &amp; Crumb</td><td>Our story | Maple &amp; Crumb</td></tr>
+    <tr><td>Canonical</td><td>http://localhost:8080/about</td><td>http://localhost:8081/about</td></tr>
+    <tr><td>Time</td><td>2 ms</td><td>2 ms</td></tr>
+  </tbody></table>
+</details>
+<details class="card">
+  <summary><span class="badge v-warning">warning</span>
+    <code>/specials</code>    <span class="muted"> · 200 → 200</span></summary>
+  <ul>
+<li><span class="badge v-warning">warning</span> <code>redirect_chain_long</code> 3 redirects before the final page (limit 2): http://localhost:8081/specials -&gt; http://localhost:8081/offers -&gt; http://localhost:8081/offers/ -&gt; http://localhost:8081/deals</li><li><span class="badge v-warning">warning</span> <code>unexpected_redirect</code> Old site serves the URL directly; the new site redirects (301) to http://localhost:8081/offers.</li><li><span class="badge v-ok">info</span> <code>security_header_lost</code> Security headers present on old but missing on new: x-frame-options</li>  </ul>
+  <table><thead><tr><th></th><th>Old</th><th>New</th></tr></thead><tbody>
+    <tr><td>Final URL</td><td>http://localhost:8080/specials</td><td>http://localhost:8081/deals</td></tr>
+    <tr><td>Redirects</td><td>0</td><td>3</td></tr>
+    <tr><td>Title</td><td>Specials | Maple &amp; Crumb</td><td>Specials | Maple &amp; Crumb</td></tr>
+    <tr><td>Canonical</td><td>http://localhost:8080/specials</td><td>http://localhost:8081/deals</td></tr>
+    <tr><td>Time</td><td>2 ms</td><td>10 ms</td></tr>
+  </tbody></table>
+</details>
+<details class="card">
+  <summary><span class="badge v-warning">warning</span>
+    <code>/blog/sourdough-basics</code>    <span class="muted"> · 200 → 200</span></summary>
+  <ul>
+<li><span class="badge v-warning">warning</span> <code>meta_description_lost</code> Meta description is missing on the new page.</li><li><span class="badge v-ok">info</span> <code>security_header_lost</code> Security headers present on old but missing on new: x-frame-options</li>  </ul>
+  <table><thead><tr><th></th><th>Old</th><th>New</th></tr></thead><tbody>
+    <tr><td>Final URL</td><td>http://localhost:8080/blog/sourdough-basics</td><td>http://localhost:8081/blog/sourdough-basics</td></tr>
+    <tr><td>Redirects</td><td>0</td><td>0</td></tr>
+    <tr><td>Title</td><td>Sourdough basics | Maple &amp; Crumb</td><td>Sourdough basics | Maple &amp; Crumb</td></tr>
+    <tr><td>Canonical</td><td>http://localhost:8080/blog/sourdough-basics</td><td>http://localhost:8081/blog/sourdough-basics</td></tr>
+    <tr><td>Time</td><td>2 ms</td><td>2 ms</td></tr>
+  </tbody></table>
+</details>
+<details class="card">
+  <summary><span class="badge v-warning">warning</span>
+    <code>/gallery</code>    <span class="muted"> · 200 → 200</span></summary>
+  <ul>
+<li><span class="badge v-ok">info</span> <code>security_header_lost</code> Security headers present on old but missing on new: x-frame-options</li><li><span class="badge v-warning">warning</span> <code>slower</code> Slower on the new site: 2 ms -&gt; 2486 ms (+2484 ms).</li>  </ul>
+  <table><thead><tr><th></th><th>Old</th><th>New</th></tr></thead><tbody>
+    <tr><td>Final URL</td><td>http://localhost:8080/gallery</td><td>http://localhost:8081/gallery</td></tr>
+    <tr><td>Redirects</td><td>0</td><td>0</td></tr>
+    <tr><td>Title</td><td>Gallery | Maple &amp; Crumb</td><td>Gallery | Maple &amp; Crumb</td></tr>
+    <tr><td>Canonical</td><td>http://localhost:8080/gallery</td><td>http://localhost:8081/gallery</td></tr>
+    <tr><td>Time</td><td>2 ms</td><td>2486 ms</td></tr>
+  </tbody></table>
+</details>
+<h2>OK (3)</h2>
+<details class="card"><summary>Show 3 URLs that match</summary>
+<ul><li><code>/</code> <span class="muted">200 → 200</span></li><li><code>/blog/</code> <span class="muted">200 → 200</span></li><li><code>/our-team</code> → <code>/team</code> <span class="muted">200 → 200</span></li></ul>
+</details>
+<footer>Generated by SiteCheckup 0.1.0 on 2026-10-10 02:21 UTC.
+Passive automated checks only; this is not a substitute for a professional penetration test.</footer>
+</main>
+</body>
+</html>
