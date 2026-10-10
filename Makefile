@@ -29,9 +29,9 @@ format: ## Auto-format and auto-fix lint issues
 
 demo: ## Start the demo lab (Docker) and run both modes against it
 	$(COMPOSE) up -d --build legacy-site new-site
-	$(BIN)/python scripts/wait_for.py http://127.0.0.1:8080/ http://127.0.0.1:8081/
-	$(BIN)/sitecheckup audit http://127.0.0.1:8080 --i-have-permission
-	$(BIN)/sitecheckup compare http://127.0.0.1:8080 http://127.0.0.1:8081 --i-have-permission
+	$(BIN)/python scripts/wait_for.py http://localhost:8080/ http://localhost:8081/
+	$(BIN)/sitecheckup audit http://localhost:8080 --i-have-permission --rate 10
+	$(BIN)/sitecheckup compare http://localhost:8080 http://localhost:8081 --i-have-permission --rate 10 --fail-on none --path-map demo/path-map.csv
 
 demo-down: ## Stop the Docker demo lab
 	$(COMPOSE) --profile wordpress down -v
@@ -42,8 +42,8 @@ demo-local: ## Start the demo lab with a locally installed nginx (no Docker)
 demo-local-down: ## Stop the nginx-based demo lab
 	scripts/demo_local.sh stop
 
-report: ## Regenerate docs/examples/ from a running demo lab
-	$(BIN)/python scripts/generate_examples.py
+report: ## Regenerate docs/examples/ from a running demo lab (REPORT_ARGS='--wordpress URL' adds the WordPress sample)
+	$(BIN)/python scripts/generate_examples.py $(REPORT_ARGS)
 
 build: ## Build sdist + wheel
 	$(BIN)/python -m build

@@ -5,14 +5,14 @@ invented. Both listen on localhost only.
 
 | Service | URL | Role |
 | --- | --- | --- |
-| `legacy-site` | http://127.0.0.1:8080 | The "old" site. Deliberately weak, so `audit` has findings. |
-| `new-site` | http://127.0.0.1:8081 | The "migrated" site, with documented regressions for `compare`. |
-| `wordpress` + `mariadb` | http://127.0.0.1:8082 | Optional (`--profile wordpress`): a default WordPress install for the WordPress checks. |
+| `legacy-site` | http://localhost:8080 | The "old" site. Deliberately weak, so `audit` has findings. |
+| `new-site` | http://localhost:8081 | The "migrated" site, with documented regressions for `compare`. |
+| `wordpress` + `mariadb` | http://localhost:8082 | Optional (`--profile wordpress`): a default WordPress install for the WordPress checks. |
 
 ```bash
 docker compose up -d --build legacy-site new-site
-sitecheckup audit   http://127.0.0.1:8080 --i-have-permission
-sitecheckup compare http://127.0.0.1:8080 http://127.0.0.1:8081 --i-have-permission --path-map demo/path-map.csv
+sitecheckup audit   http://localhost:8080 --i-have-permission
+sitecheckup compare http://localhost:8080 http://localhost:8081 --i-have-permission --path-map demo/path-map.csv
 ```
 
 No Docker? `make demo-local` starts the same configuration with a locally installed nginx.
@@ -48,8 +48,8 @@ No Docker? `make demo-local` starts the same configuration with a locally instal
 
 ```bash
 docker compose --profile wordpress up -d
-# finish the 5-minute install at http://127.0.0.1:8082, then:
-sitecheckup audit http://127.0.0.1:8082 --i-have-permission
+# finish the 5-minute install at http://localhost:8082, then:
+sitecheckup audit http://localhost:8082 --i-have-permission
 ```
 
 The database password in `docker-compose.yml` is a throwaway value for this local lab.

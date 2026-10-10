@@ -34,7 +34,7 @@ http {
 }
 CONF
   "$nginx_bin" -p "$work" -c "$work/nginx.conf"
-  echo "Demo lab: legacy http://127.0.0.1:8080  new http://127.0.0.1:8081"
+  echo "Demo lab: legacy http://localhost:8080  new http://localhost:8081"
 }
 
 stop() {
