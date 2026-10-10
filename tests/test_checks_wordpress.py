@@ -67,8 +67,7 @@ def test_xmlrpc(site: FakeSite, make_ctx: Ctx) -> None:
 
 def test_rest_user_enumeration(site: FakeSite, make_ctx: Ctx) -> None:
     wp(site)
-    ctx = make_ctx()
-    assert WpRestUsers().run(ctx).status is Status.PASS
+    assert WpRestUsers().run(make_ctx()).status is Status.PASS
     users = [{"id": 1, "slug": "editor-one"}, {"id": 2, "slug": "editor-two"}]
     site.add(f"{BASE}/wp-json/wp/v2/users?per_page=3", text=json.dumps(users))
     outcome = WpRestUsers().run(make_ctx())
@@ -76,14 +75,35 @@ def test_rest_user_enumeration(site: FakeSite, make_ctx: Ctx) -> None:
     assert "editor-one" in outcome.evidence
 
 
+def test_rest_user_enumeration_with_plain_permalinks(site: FakeSite, make_ctx: Ctx) -> None:
+    wp(site)  # /wp-json/ is a 404 on plain permalinks; the API lives behind ?rest_route=
+    site.add(
+        f"{BASE}/?rest_route=/wp/v2/users&per_page=3", text=json.dumps([{"slug": "admin-user"}])
+    )
+    outcome = WpRestUsers().run(make_ctx())
+    assert outcome.status is Status.FAIL
+    assert "rest_route" in outcome.evidence
+
+
 def test_rest_users_blocked_or_malformed(site: FakeSite, make_ctx: Ctx) -> None:
     wp(site)
-    url = f"{BASE}/wp-json/wp/v2/users?per_page=3"
-    site.add(url, 401, text='{"code":"rest_cannot_access"}')
+    for url in (
+        f"{BASE}/wp-json/wp/v2/users?per_page=3",
+        f"{BASE}/?rest_route=/wp/v2/users&per_page=3",
+    ):
+        site.add(url, 401, text='{"code":"rest_cannot_access"}')
     assert WpRestUsers().run(make_ctx()).status is Status.PASS
-    site.add(url, 200, text="not json")
+    for url in (
+        f"{BASE}/wp-json/wp/v2/users?per_page=3",
+        f"{BASE}/?rest_route=/wp/v2/users&per_page=3",
+    ):
+        site.add(url, 200, text="not json")
     assert WpRestUsers().run(make_ctx()).status is Status.PASS
-    site.add(url, 200, text="[]")
+    for url in (
+        f"{BASE}/wp-json/wp/v2/users?per_page=3",
+        f"{BASE}/?rest_route=/wp/v2/users&per_page=3",
+    ):
+        site.add(url, 200, text="[]")
     assert WpRestUsers().run(make_ctx()).status is Status.PASS
 
 

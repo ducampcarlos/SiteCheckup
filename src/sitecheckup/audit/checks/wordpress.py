@@ -70,6 +70,13 @@ class WpXmlRpc(WordPressCheck):
         return Outcome.ok(f"/xmlrpc.php -> HTTP {res.status}")
 
 
+# Pretty permalinks expose the REST API at /wp-json/; plain permalinks only via ?rest_route=.
+_REST_USER_PATHS = (
+    "/wp-json/wp/v2/users?per_page=3",
+    "/?rest_route=/wp/v2/users&per_page=3",
+)
+
+
 @register
 class WpRestUsers(WordPressCheck):
     """User enumeration through the REST API."""
@@ -78,7 +85,7 @@ class WpRestUsers(WordPressCheck):
     title = "REST API does not list users publicly"
     severity = Severity.MEDIUM
     description = (
-        "/wp-json/wp/v2/users returns user slugs (often the login name) to anonymous visitors, "
+        "/wp-json/wp/v2/users (or /?rest_route=/wp/v2/users) returns user slugs (often the login name) to anonymous visitors, "
         "giving attackers half of every credential pair."
     )
     remediation = (
@@ -89,17 +96,23 @@ class WpRestUsers(WordPressCheck):
     references = (_WP_HARDENING, "https://developer.wordpress.org/rest-api/reference/users/")
 
     def run(self, ctx: AuditContext) -> Outcome:
-        """GET the users endpoint and see if it returns a JSON list of users."""
-        res = ctx.fetch("/wp-json/wp/v2/users?per_page=3")
-        if res.status == 200:
+        """GET the users endpoint (pretty and plain-permalink forms) and look for a user list."""
+        tried = []
+        for path in _REST_USER_PATHS:
+            res = ctx.fetch(path)
+            tried.append(f"{path.split('?')[0]} -> HTTP {res.status}")
+            if res.status != 200:
+                continue
             try:
                 data = json.loads(res.text)
             except ValueError:
-                data = None
+                continue
             if isinstance(data, list) and data and all(isinstance(u, dict) for u in data):
                 slugs = ", ".join(str(u.get("slug", "?")) for u in data[:3])
-                return Outcome.fail(f"Anonymous request returned {len(data)} user(s): {slugs}")
-        return Outcome.ok(f"/wp-json/wp/v2/users -> HTTP {res.status}, no user list.")
+                return Outcome.fail(
+                    f"Anonymous request to {path.split('&')[0]} returned {len(data)} user(s): {slugs}"
+                )
+        return Outcome.ok("No user list returned (" + "; ".join(tried) + ").")
 
 
 @register
