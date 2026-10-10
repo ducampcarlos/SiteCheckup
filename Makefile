@@ -29,7 +29,7 @@ format: ## Auto-format and auto-fix lint issues
 
 demo: ## Start the demo lab (Docker) and run both modes against it
 	$(COMPOSE) up -d --build legacy-site new-site
-	$(PY) scripts/wait_for.py http://127.0.0.1:8080/ http://127.0.0.1:8081/
+	$(BIN)/python scripts/wait_for.py http://127.0.0.1:8080/ http://127.0.0.1:8081/
 	$(BIN)/sitecheckup audit http://127.0.0.1:8080 --i-have-permission
 	$(BIN)/sitecheckup compare http://127.0.0.1:8080 http://127.0.0.1:8081 --i-have-permission
 

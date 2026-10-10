@@ -1,0 +1,65 @@
+# Demo lab for SiteCheckup. Everything is local and invented. See demo/README.md.
+name: sitecheckup-lab
+
+x-nginx: &nginx
+  image: nginx:1.27-alpine
+  restart: unless-stopped
+  healthcheck:
+    test: ["CMD", "wget", "-q", "-O", "/dev/null", "http://127.0.0.1/"]
+    interval: 5s
+    timeout: 3s
+    retries: 10
+
+services:
+  legacy-site:
+    <<: *nginx
+    ports: ["127.0.0.1:8080:80"]
+    volumes:
+      - ./demo/legacy/html:/usr/share/nginx/html:ro
+      - ./demo/legacy/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+
+  new-site:
+    <<: *nginx
+    ports: ["127.0.0.1:8081:80"]
+    volumes:
+      - ./demo/new/html:/usr/share/nginx/html:ro
+      - ./demo/new/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+
+  # Optional: a default WordPress install to try the WordPress checks against.
+  wordpress:
+    image: wordpress:6-apache
+    profiles: ["wordpress"]
+    depends_on:
+      mariadb:
+        condition: service_healthy
+    ports: ["127.0.0.1:8082:80"]
+    environment:
+      WORDPRESS_DB_HOST: mariadb
+      WORDPRESS_DB_USER: wp_demo
+      WORDPRESS_DB_PASSWORD: demo-only-password
+      WORDPRESS_DB_NAME: wp_demo
+
+  mariadb:
+    image: mariadb:11
+    profiles: ["wordpress"]
+    environment:
+      MARIADB_DATABASE: wp_demo
+      MARIADB_USER: wp_demo
+      MARIADB_PASSWORD: demo-only-password
+      MARIADB_RANDOM_ROOT_PASSWORD: "1"
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  # Run the tool inside the lab network:
+  #   docker compose --profile tools run --rm sitecheckup audit http://legacy-site --i-have-permission
+  sitecheckup:
+    build: .
+    profiles: ["tools"]
+    depends_on:
+      legacy-site:
+        condition: service_healthy
+      new-site:
+        condition: service_healthy

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://www.maple-crumb.example.test/</loc></url>
+  <url><loc>https://www.maple-crumb.example.test/about</loc></url>
+  <url><loc>https://www.maple-crumb.example.test/menu</loc></url>
+  <url><loc>https://www.maple-crumb.example.test/specials</loc></url>
+  <url><loc>https://www.maple-crumb.example.test/contact</loc></url>
+  <url><loc>https://www.maple-crumb.example.test/blog/</loc></url>
+  <url><loc>https://www.maple-crumb.example.test/blog/sourdough-basics</loc></url>
+  <url><loc>https://www.maple-crumb.example.test/blog/holiday-hours</loc></url>
+  <url><loc>https://www.maple-crumb.example.test/old-promo</loc></url>
+  <url><loc>https://www.maple-crumb.example.test/our-team</loc></url>
+  <url><loc>https://www.maple-crumb.example.test/gallery</loc></url>
+</urlset>
