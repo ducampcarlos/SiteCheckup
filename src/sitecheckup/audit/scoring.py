@@ -8,9 +8,9 @@ from sitecheckup.audit.models import Finding
 from sitecheckup.models import Severity
 
 PENALTY: dict[Severity, int] = {
-    Severity.HIGH: 20,
-    Severity.MEDIUM: 8,
-    Severity.LOW: 3,
+    Severity.HIGH: 15,
+    Severity.MEDIUM: 6,
+    Severity.LOW: 2,
     Severity.INFO: 0,
 }
 

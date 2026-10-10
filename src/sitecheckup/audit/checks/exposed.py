@@ -79,6 +79,7 @@ class ProbeCheck(Check):
     """Base class: a check that fails when any of its probes hits."""
 
     probes: tuple[Probe, ...] = ()
+    redacted = False  # True when hits are sensitive files whose contents must not be recorded
 
     def run(self, ctx: AuditContext) -> Outcome:
         """Request each probe path once and report hits without echoing contents."""
@@ -89,7 +90,8 @@ class ProbeCheck(Check):
             f"{p.path} -> HTTP {r.status}, {len(r.body)} bytes{'+' if r.body_truncated else ''}"
             for p, r in hits
         ]
-        return Outcome.fail("; ".join(lines) + " (contents deliberately not recorded)")
+        note = " (contents deliberately not recorded)" if self.redacted else ""
+        return Outcome.fail("; ".join(lines) + note)
 
 
 @register
@@ -109,6 +111,7 @@ class ExposedGit(ProbeCheck):
         "('location ~ /\\. { deny all; }'), and rotate any secret that was ever committed."
     )
     references = (_OWASP_WSTG,)
+    redacted = True
     probes = (
         Probe("/.git/HEAD", _contains(b"ref: refs/")),
         Probe("/.git/config", _contains(b"[core]")),
@@ -129,6 +132,7 @@ class ExposedEnv(ProbeCheck):
         "contained: assume it was read."
     )
     references = (_OWASP_WSTG,)
+    redacted = True
     probes = (Probe("/.env", _env), Probe("/.env.production", _env))
 
 
@@ -149,6 +153,7 @@ class ExposedBackups(ProbeCheck):
         "fails if archives or *.bak/*.old/*~ files appear in the published directory."
     )
     references = (_OWASP_WSTG,)
+    redacted = True
     probes = (
         Probe("/backup.zip", _archive),
         Probe("/backup.sql", _archive),

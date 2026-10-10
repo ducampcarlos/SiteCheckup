@@ -30,13 +30,14 @@ def test_severity_ordering() -> None:
     [
         ([], 100, "A"),
         ([Severity.INFO] * 5, 100, "A"),
-        ([Severity.LOW] * 3, 91, "A"),
-        ([Severity.LOW] * 4, 88, "B"),
-        ([Severity.MEDIUM], 92, "B"),  # medium caps the grade at B
-        ([Severity.MEDIUM] * 3, 76, "C"),
-        ([Severity.HIGH], 80, "C"),  # high caps the grade at C
-        ([Severity.HIGH] * 2, 60, "D"),
-        ([Severity.HIGH] * 6, 0, "F"),
+        ([Severity.LOW] * 3, 94, "A"),
+        ([Severity.LOW] * 10, 80, "B"),
+        ([Severity.MEDIUM], 94, "B"),  # medium caps the grade at B
+        ([Severity.MEDIUM] * 6, 64, "D"),
+        ([Severity.HIGH], 85, "C"),  # high caps the grade at C
+        ([Severity.HIGH] * 2, 70, "C"),
+        ([Severity.HIGH] * 4, 40, "F"),
+        ([Severity.HIGH] * 8, 0, "F"),
     ],
 )
 def test_score_and_grade(severities: list[Severity], score: int, grade: str) -> None:

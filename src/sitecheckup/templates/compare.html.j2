@@ -1,0 +1,50 @@
+{% extends "_base.html.j2" %}
+{% block title %}SiteCheckup compare: {{ report.old_base }} vs {{ report.new_base }}{% endblock %}
+{% macro row(r) %}
+<details class="card">
+  <summary><span class="badge v-{{ r.verdict.value }}">{{ r.verdict.value }}</span>
+    <code>{{ r.path }}</code>{% if r.new_path != r.path %} → <code>{{ r.new_path }}</code>{% endif %}
+    <span class="muted"> · {{ r.old.status }} → {{ r.new.status }}</span></summary>
+  <ul>
+  {% for i in r.issues %}<li><span class="badge v-{{ 'ok' if i.level.value == 'info' else i.level.value }}">{{ i.level.value }}</span> <code>{{ i.code }}</code> {{ i.message }}</li>{% endfor %}
+  </ul>
+  <table><thead><tr><th></th><th>Old</th><th>New</th></tr></thead><tbody>
+    <tr><td>Final URL</td><td>{{ r.old.final_url }}</td><td>{{ r.new.final_url }}</td></tr>
+    <tr><td>Redirects</td><td>{{ r.old.chain | length }}</td><td>{{ r.new.chain | length }}</td></tr>
+    <tr><td>Title</td><td>{{ r.old.title or "—" }}</td><td>{{ r.new.title or "—" }}</td></tr>
+    <tr><td>Canonical</td><td>{{ r.old.canonical or "—" }}</td><td>{{ r.new.canonical or "—" }}</td></tr>
+    <tr><td>Time</td><td>{{ r.old.elapsed_ms }} ms</td><td>{{ r.new.elapsed_ms }} ms</td></tr>
+  </tbody></table>
+</details>
+{% endmacro %}
+{% block body %}
+{% set counts = report.counts() %}
+<h1>SiteCheckup compare</h1>
+<p class="muted">Old: <strong>{{ report.old_base }}</strong><br>New: <strong>{{ report.new_base }}</strong><br>
+{{ report.results | length }} URLs from {{ report.source }} · {{ report.requests_made }} requests</p>
+{% if report.truncated %}<div class="card notice">The run stopped at the request cap; later URLs were not compared.</div>{% endif %}
+
+<div class="summary">
+  <div class="card"><div class="big" style="color:var(--high)">{{ counts["blocking"] }}</div><div class="muted">blocking</div></div>
+  <div class="card"><div class="big" style="color:var(--medium)">{{ counts["warning"] }}</div><div class="muted">warnings</div></div>
+  <div class="card"><div class="big" style="color:var(--ok)">{{ counts["ok"] }}</div><div class="muted">ok</div></div>
+</div>
+
+{% if report.site_issues %}<h2>Site-wide</h2>
+{% for i in report.site_issues %}<div class="card"><span class="badge v-{{ i.level.value }}">{{ i.level.value }}</span> <code>{{ i.code }}</code> {{ i.message }}</div>{% endfor %}{% endif %}
+
+{% set totals = report.issue_totals() %}
+{% if totals %}<h2>Most common issues</h2>
+<table><thead><tr><th>Issue</th><th>URLs</th></tr></thead><tbody>
+{% for code, n in totals.items() %}<tr><td><code>{{ code }}</code></td><td>{{ n }}</td></tr>{% endfor %}
+</tbody></table>{% endif %}
+
+<h2>Blocking ({{ counts["blocking"] }})</h2>
+{% for r in report.by_verdict(Verdict.BLOCKING) %}{{ row(r) }}{% else %}<div class="card">Nothing blocking.</div>{% endfor %}
+<h2>Warnings ({{ counts["warning"] }})</h2>
+{% for r in report.by_verdict(Verdict.WARNING) %}{{ row(r) }}{% else %}<div class="card">No warnings.</div>{% endfor %}
+<h2>OK ({{ counts["ok"] }})</h2>
+<details class="card"><summary>Show {{ counts["ok"] }} URLs that match</summary>
+<ul>{% for r in report.by_verdict(Verdict.OK) %}<li><code>{{ r.path }}</code>{% if r.new_path != r.path %} → <code>{{ r.new_path }}</code>{% endif %} <span class="muted">{{ r.old.status }} → {{ r.new.status }}</span></li>{% endfor %}</ul>
+</details>
+{% endblock %}

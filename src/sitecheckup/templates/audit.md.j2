@@ -1,0 +1,58 @@
+# SiteCheckup audit: {{ report.target }}
+
+- **Grade:** {{ report.grade }} ({{ report.score }}/100)
+- **Findings:** {% for sev, n in report.counts().items() %}{{ n }} {{ sev }}{% if not loop.last %}, {% endif %}{% endfor %}
+
+- **Requests:** {{ report.requests_made }}{% if report.wordpress_detected %} · WordPress detected{% endif %}
+
+- **Generated:** {{ report.generated_at.strftime("%Y-%m-%d %H:%M UTC") }} by SiteCheckup {{ report.tool_version }}
+{% if report.truncated %}
+
+> The run stopped at the request cap, so some checks were skipped.
+{% endif %}
+
+## Findings ({{ report.failures | length }})
+{% for f in report.failures %}
+
+### [{{ f.severity.value | upper }}] {{ f.title }} (`{{ f.id }}`)
+
+{% if f.evidence %}
+**Evidence:** {{ f.evidence }}
+
+{% endif %}
+{{ f.description }}
+
+**Remediation:** {{ f.remediation }}
+{% if f.references %}
+
+References:
+{% for ref in f.references %}
+- <{{ ref }}>
+{% endfor %}
+{% endif %}
+{% else %}
+
+No findings.
+{% endfor %}
+
+## Passed
+{% for f in report.findings if f.status.value == "pass" %}
+- {{ f.title }} (`{{ f.id }}`){% if f.evidence %}: {{ f.evidence | md_cell }}{% endif %}
+
+{% endfor %}
+
+## Not applicable
+{% for f in report.findings if f.status.value == "skipped" %}
+- {{ f.title }} (`{{ f.id }}`): {{ f.evidence | md_cell }}
+{% endfor %}
+{% set errors = report.findings | selectattr("status.value", "equalto", "error") | list %}
+{% if errors %}
+
+## Checks that errored
+{% for f in errors %}
+- `{{ f.id }}`: {{ f.evidence | md_cell }}
+{% endfor %}
+{% endif %}
+
+---
+*Passive automated checks only; this is not a substitute for a professional penetration test.*

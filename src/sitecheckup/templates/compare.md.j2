@@ -1,0 +1,50 @@
+# SiteCheckup compare
+
+- **Old:** {{ report.old_base }}
+- **New:** {{ report.new_base }}
+- **URLs compared:** {{ report.results | length }} (source: {{ report.source }}, {{ report.requests_made }} requests)
+{% set counts = report.counts() %}
+- **Result:** {{ counts["blocking"] }} blocking, {{ counts["warning"] }} warnings, {{ counts["ok"] }} ok
+- **Generated:** {{ report.generated_at.strftime("%Y-%m-%d %H:%M UTC") }} by SiteCheckup {{ report.tool_version }}
+{% if report.truncated %}
+
+> The run stopped at the request cap; later URLs were not compared.
+{% endif %}
+{% if report.site_issues %}
+
+## Site-wide
+{% for i in report.site_issues %}
+- **{{ i.level.value }}** `{{ i.code }}`: {{ i.message | md_cell }}
+{% endfor %}
+{% endif %}
+{% set totals = report.issue_totals() %}
+{% if totals %}
+
+## Most common issues
+
+| Issue | URLs |
+| --- | ---: |
+{% for code, n in totals.items() %}
+| `{{ code }}` | {{ n }} |
+{% endfor %}
+{% endif %}
+{% for title, verdict in (("Blocking", Verdict.BLOCKING), ("Warnings", Verdict.WARNING)) %}
+
+## {{ title }} ({{ counts[verdict.value] }})
+{% for r in report.by_verdict(verdict) %}
+
+### `{{ r.path }}`{% if r.new_path != r.path %} → `{{ r.new_path }}`{% endif %} ({{ r.old.status }} → {{ r.new.status }})
+
+{% for i in r.issues %}
+- **{{ i.level.value }}** `{{ i.code }}`: {{ i.message | md_cell }}
+{% endfor %}
+{% else %}
+
+None.
+{% endfor %}
+{% endfor %}
+
+## OK ({{ counts["ok"] }})
+{% for r in report.by_verdict(Verdict.OK) %}
+- `{{ r.path }}`{% if r.new_path != r.path %} → `{{ r.new_path }}`{% endif %} ({{ r.old.status }} → {{ r.new.status }})
+{% endfor %}

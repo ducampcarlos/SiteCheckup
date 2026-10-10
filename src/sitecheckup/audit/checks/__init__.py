@@ -1,10 +1,6 @@
-"""Built-in checks. Importing this package registers all of them."""
+"""Built-in checks. Importing this package registers all of them, in report order."""
 
-from sitecheckup.audit.checks import (  # noqa: F401
-    cookies,
-    exposed,
-    headers,
-    hygiene,
-    transport,
-    wordpress,
-)
+from importlib import import_module
+
+for _module in ("transport", "headers", "cookies", "exposed", "wordpress", "hygiene"):
+    import_module(f"{__name__}.{_module}")

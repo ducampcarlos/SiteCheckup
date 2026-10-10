@@ -74,6 +74,7 @@ ignore = [
     "PLR0911", # many returns are clearer than nesting in check code
     "PLR0912",
     "PLR0913",
+    "PLR0917",
     "PLR0915",
 ]
 

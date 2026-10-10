@@ -1,0 +1,46 @@
+{% extends "_base.html.j2" %}
+{% block title %}SiteCheckup audit: {{ report.target }}{% endblock %}
+{% macro finding(f, is_open=False) %}
+<details class="card"{% if is_open %} open{% endif %}>
+  <summary><span class="badge sev-{{ f.severity.value }}">{{ f.severity.value }}</span>
+    <strong>{{ f.title }}</strong> <code class="muted">{{ f.id }}</code></summary>
+  {% if f.evidence %}<p><strong>Evidence</strong></p><pre>{{ f.evidence }}</pre>{% endif %}
+  <p>{{ f.description }}</p>
+  <p><strong>Remediation.</strong> {{ f.remediation }}</p>
+  {% if f.references %}<p class="muted">References:
+    {% for ref in f.references %}<a href="{{ ref }}" rel="noopener noreferrer">{{ ref }}</a>{% if not loop.last %} · {% endif %}{% endfor %}</p>{% endif %}
+</details>
+{% endmacro %}
+{% block body %}
+<h1>SiteCheckup audit</h1>
+<p class="muted">Target: <strong>{{ report.target }}</strong> · {{ report.requests_made }} requests{% if report.wordpress_detected %} · WordPress detected{% endif %}</p>
+{% if report.truncated %}<div class="card notice">The run stopped at the request cap, so some checks were skipped.</div>{% endif %}
+
+<div class="summary">
+  <div class="card"><div class="big">{{ report.grade }}</div><div class="muted">grade</div></div>
+  <div class="card"><div class="big">{{ report.score }}</div><div class="muted">score / 100</div></div>
+  {% for sev, n in report.counts().items() %}
+  <div class="card"><div class="big" style="color:var(--{{ sev }})">{{ n }}</div><div class="muted">{{ sev }}</div></div>
+  {% endfor %}
+</div>
+
+<h2>Findings ({{ report.failures | length }})</h2>
+{% for f in report.failures %}{{ finding(f, f.severity.value == "high") }}{% else %}
+<div class="card">No findings. 🎉</div>{% endfor %}
+
+{% set passed = report.findings | selectattr("status.value", "equalto", "pass") | list %}
+{% set skipped = report.findings | selectattr("status.value", "equalto", "skipped") | list %}
+{% set errors = report.findings | selectattr("status.value", "equalto", "error") | list %}
+{% if errors %}<h2>Checks that errored ({{ errors | length }})</h2>
+<ul>{% for f in errors %}<li><code>{{ f.id }}</code>: {{ f.evidence }}</li>{% endfor %}</ul>{% endif %}
+
+<h2>Passed ({{ passed | length }})</h2>
+<table><thead><tr><th>Check</th><th>Observed</th></tr></thead><tbody>
+{% for f in passed %}<tr><td>{{ f.title }}<br><code class="muted">{{ f.id }}</code></td><td>{{ f.evidence }}</td></tr>{% endfor %}
+</tbody></table>
+
+<h2>Not applicable ({{ skipped | length }})</h2>
+<table><thead><tr><th>Check</th><th>Reason</th></tr></thead><tbody>
+{% for f in skipped %}<tr><td>{{ f.title }}<br><code class="muted">{{ f.id }}</code></td><td>{{ f.evidence }}</td></tr>{% endfor %}
+</tbody></table>
+{% endblock %}
